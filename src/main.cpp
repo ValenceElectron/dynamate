@@ -1,5 +1,5 @@
 // A dynamic/animated wallpaper engine for Linux by ValenceElectron
-#include "utils/Utils.hpp"
+#include "utils/OGLSetup.hpp"
 #include "utils/Camera.hpp"
 
 #define numVAOs 1
@@ -44,7 +44,7 @@ void SetupProjMat(GLFWwindow* window) {
 }
 
 void init(GLFWwindow* window) {
-    d4Program = Utils::createShaderProgram("shaders/vertShader.glsl", "shaders/fragShader.glsl");
+    d4Program = OGLSetup::createShaderProgram("shaders/vertShader.glsl", "shaders/fragShader.glsl");
     //waycli.ConnectToServer();
     
     d4LocX = 0.0f; d4LocY = 0.0f; d4LocZ = 5.0f;
