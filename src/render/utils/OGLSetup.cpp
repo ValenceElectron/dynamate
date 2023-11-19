@@ -146,3 +146,10 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char
 	finalizeShaderProgram(vtgfprogram);
 	return vtgfprogram;
 }
+
+void OGLSetup::createProjectionMatrix(GLFWwindow* window, int width, int height, float &aspect, glm::mat4 &pMat) {
+    // building perspective matrix
+    glfwGetFramebufferSize(window, &width, &height);
+    aspect = (float) width / (float) height;
+    pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
+}
