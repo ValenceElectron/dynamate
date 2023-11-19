@@ -1,2 +1,0 @@
-You can write the desktop background by writing directly by writing to the root pixmap
-(root window's pixmap). Use xlib or XCB.
