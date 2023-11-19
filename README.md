@@ -1,4 +1,3 @@
 # Overview
 
-Dynamate is a dynamic/animated wallpaper software that attempts to achieve things on Linux 
-similar to Wallpaper Engine on Windows.
+Dynamate is a software that adds an animated character to your desktop.
