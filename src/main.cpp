@@ -1,4 +1,4 @@
-// A dynamic wallpaper app for Linux by ValenceElectron
+// A dynamic/animated wallpaper engine for Linux by ValenceElectron
 #include "utils/Utils.hpp"
 #include "utils/Camera.hpp"
 
