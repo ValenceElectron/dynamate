@@ -1,6 +1,6 @@
-FILES = main.cpp ./render/Draw.hpp ./render/Draw.cpp ./render/utils/Camera.hpp ./render/utils/Camera.cpp ./render/utils/OGLSetup.hpp ./render/utils/OGLSetup.cpp ./render/objects/DrawableObjects.hpp ./render/objects/DrawableObjects.cpp
-CFLAGS = -std=c++11
-LDFLAGS = -lglfw -lGLEW -lGL -lGLU -lX11
+FILES = main.cpp ./render/Draw.hpp ./render/Draw.cpp ./render/utils/Camera.hpp ./render/utils/Camera.cpp ./render/utils/OGLSetup.hpp ./render/utils/OGLSetup.cpp ./render/objects/DrawableObject.hpp ./render/objects/DrawableObject.cpp ./render/DrawableObjectManager.hpp ./render/DrawableObjectManager.cpp
+CFLAGS = -std=c++17
+LDFLAGS = -lglfw -lGLEW -lGL -lGLU
 
 MakeMain: main.cpp
 	rm -f main && g++ $(CFLAGS) $(FILES) -o main $(LDFLAGS) && clear

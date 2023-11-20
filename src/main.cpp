@@ -7,7 +7,10 @@
 int windowWidth, windowHeight, monitorX, monitorY;
 int width, height;
 
-int main(void) {
+GLFWwindow* window;
+
+void init() {
+    std::cout << "Initializing...\n";
     if (!glfwInit()) {exit(EXIT_FAILURE);}
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -26,7 +29,7 @@ int main(void) {
     glfwGetMonitorPos(monitors[0], &monitorX, &monitorY);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     
-    GLFWwindow* window = glfwCreateWindow(600, 600, "Dynamate", NULL, NULL);
+    window = glfwCreateWindow(600, 600, "Dynamate", NULL, NULL);
 
     glfwMakeContextCurrent(window);
     glfwSetWindowPos(window, monitorX + (videoMode->width - windowWidth) / 2, monitorY + (videoMode->height - windowHeight) / 2);
@@ -35,14 +38,21 @@ int main(void) {
 
     if(glewInit() != GLEW_OK) {exit(EXIT_FAILURE);}
     glfwSwapInterval(1);
-    
+}
+
+int main(void) {
+    init();
     //init(window);
+
+    std::cout << "Initializing rendering pipeline...\n";
     Draw draw(window, width, height);
 
     // comment following line to see the border of window
-    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
+    //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     
+    std::cout << "Beginning main program loop...\n";
     while(!glfwWindowShouldClose(window)) {
+        //std::cout << "drawing\n";
         draw.startDrawing(glfwGetTime());
         glfwSwapBuffers(window);
         glfwPollEvents();

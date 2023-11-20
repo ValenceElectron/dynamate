@@ -1,4 +1,5 @@
-#include "objects/DrawableObjects.hpp"
+#include "DrawableObjectManager.hpp"
+#include "objects/DrawableObject.hpp"
 #include "utils/Camera.hpp"
 #include "utils/OGLSetup.hpp"
 
@@ -21,6 +22,8 @@ private:
     float aspect;
     glm::mat4 pMat, vMat, mMat, tMat, rMat;
 
+    DrawableObjectManager objManager;
+
     void SetupVertices();
     void DrawObject(double currentTime);
 
@@ -28,3 +31,4 @@ public:
     Draw(GLFWwindow* window, int width, int height);
     void startDrawing(double currentTime);
 };
+    //init(window);
