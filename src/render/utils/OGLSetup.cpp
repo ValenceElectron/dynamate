@@ -147,9 +147,7 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char
 	return vtgfprogram;
 }
 
-void OGLSetup::createProjectionMatrix(GLFWwindow* window, int width, int height, float &aspect, glm::mat4 &pMat) {
+void OGLSetup::createProjectionMatrix(glm::mat4 &pMat) {
     // building perspective matrix
-    glfwGetFramebufferSize(window, &width, &height);
-    aspect = (float) width / (float) height;
-    pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f); // 1.0472 radians = 60 degrees
+    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
 }

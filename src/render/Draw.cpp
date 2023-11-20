@@ -6,7 +6,7 @@ Draw::Draw(GLFWwindow* window, int width, int height) {
 
     this->width = width; this->height = height;
 
-    OGLSetup::createProjectionMatrix(window, width, height, aspect, pMat);
+    OGLSetup::createProjectionMatrix(pMat);
     std::cout << "Projection matrix creation complete.\n";
 
     std::cout << "Adding tetrahedron to object manager buffer...\n";

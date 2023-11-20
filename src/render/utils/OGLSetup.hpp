@@ -24,6 +24,6 @@ public:
 	static GLuint createShaderProgram(const char *vp, const char *gp, const char *fp);
 	static GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp);
 	static GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, char *gp, const char *fp);
-    static void createProjectionMatrix(GLFWwindow* window, int width, int height, float &aspect, glm::mat4 &pMat);
+    static void createProjectionMatrix(glm::mat4 &pMat);
 };
 
