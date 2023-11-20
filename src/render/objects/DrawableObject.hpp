@@ -19,7 +19,6 @@ private:
     float *vertexCoordinates;
     int numVertexCoordinates;
     float position[3];
-    glm::vec3 positionVector;
     GLuint shader;
 
 public:
@@ -38,7 +37,7 @@ public:
     void getVertices(float *array);
     int getNumberOfVertices();
     void getPosition(float *pos);
-    glm::vec3 getPosition();
+    glm::vec3 getPositionV3();
     GLuint getShader();
 
     void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo);

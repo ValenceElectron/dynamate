@@ -7,14 +7,6 @@
 #define numVAOs 1
 
 class DrawableObjectManager {
-private:
-    std::list<DrawableObject*> objectBuffer;
-    std::vector<GLuint> vbo;
-    int numVBOs;
-    int numUsedVBOs;
-    GLuint vao[numVAOs];
-    //GLuint vbo[numVBOs];
-
 public:
     DrawableObjectManager();
     struct drawableChunk {
@@ -23,9 +15,17 @@ public:
     };
 
     void addObject(DrawableObject *obj);
-    void setupVertices();
+    void setupVertices(drawableChunk chunk);
     drawableChunk getNext();
     DrawableObject* getMostRecent();
+
+private:
+    std::list<DrawableObject*> objectBuffer;
+    std::list<drawableChunk> objectList;
+    std::vector<GLuint> vbo;
+    int numVBOs;
+    int numUsedVBOs;
+    GLuint vao[numVAOs];
 };
 
 #endif

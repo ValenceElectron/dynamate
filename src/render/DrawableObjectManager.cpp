@@ -9,43 +9,39 @@ DrawableObjectManager::DrawableObjectManager() {
 
 void DrawableObjectManager::addObject(DrawableObject *obj) {
     std::cout << "Pushing object into list...\n";
-    objectBuffer.push_back(obj);
+
+    struct drawableChunk chunk;
+    chunk.obj = obj;
+
+    //objectBuffer.push_back(obj);
     numVBOs++;
     vbo.resize(numVBOs);
     std::cout << "Buffers resized.\n";
+    setupVertices(chunk);
 }
 
-void DrawableObjectManager::setupVertices() {
+void DrawableObjectManager::setupVertices(drawableChunk chunk) {
     std::cout << "Generating new vertex buffers...\n";
-    for (int i = numUsedVBOs; i < numVBOs; i++) {
-        GLuint *newVBO;
-        glGenBuffers(1, newVBO);
-        vbo.push_back(newVBO[0]);
-    }
-    
-    /*auto it = vbo.begin();
-    it += numUsedVBOs;*/
-    std::cout << "Assigning new vertex buffers to objects...\n";
-    for (DrawableObject *obj : objectBuffer) {
-        float verts[obj->getNumberOfVertices()] = { 0 };
-        obj->getVertices(verts);
 
-        glBindBuffer(GL_ARRAY_BUFFER, vbo.at(numUsedVBOs));
-        glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-        numUsedVBOs++;
-    }
+    GLuint vbosToGenerate[1];
+    glGenBuffers(1, vbosToGenerate);
 
+    float verts[chunk.obj->getNumberOfVertices()] = { 0 };
+    chunk.obj->getVertices(verts);
+    glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+    chunk.vertexBuffer = vbosToGenerate[0];
+
+    objectList.push_back(chunk);
     std::cout << "Vertex buffers completely setup.\n";
 }
 
 DrawableObjectManager::drawableChunk DrawableObjectManager::getNext() {
-    struct drawableChunk chunk;
-    chunk.obj = objectBuffer.front();
-    chunk.vertexBuffer = vbo.front();
-    return chunk;
-    //objectBuffer.pop_front();
+    //std::cout << "getting next drawableChunk...\n";
+    return objectList.front();
 }
 
 DrawableObject* DrawableObjectManager::getMostRecent() {
-    return objectBuffer.back();
+    return objectList.back().obj;
 }
