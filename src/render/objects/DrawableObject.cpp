@@ -18,7 +18,6 @@ DrawableObject::DrawableObject(float *pos, float *vertices, int numberOfVertices
 void DrawableObject::setVertices(float *array) {
     vertexCoordinates = new float[numVertexCoordinates];
     for (int i = 0; i < getNumberOfVertices(); i++) { 
-        //std::cout << i << std::endl;
         vertexCoordinates[i] = array[i];
     }
 }
@@ -33,7 +32,6 @@ void DrawableObject::setPosition(float *pos) {
 
 void DrawableObject::setShader(GLuint shader) { 
     this->shader = shader;
-    //std::cout << "current shader: " << this->shader << std::endl;
 }
 
 void DrawableObject::getVertices(float *array) {
@@ -54,21 +52,20 @@ void DrawableObject::getPosition(float *pos) {
 GLuint DrawableObject::getShader() { return shader; }
 
 void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo) {
-    glUseProgram(getShader());
+    GLuint shader = getShader();
+    glUseProgram(shader);
 
-    tMat = glm::translate(glm::mat4(1.0f), getPositionV3());
-    rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f));
-    mMat = tMat * rMat;
+    tMat = glm::translate(glm::mat4(1.0f), getPositionV3()); // Translation matrix
+    rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotation Matrix
+    mMat = tMat * rMat; // Translation matrix * Rotation matrix = model matrix
 
-    mLoc = glGetUniformLocation(getShader(), "mMat");
-    vLoc = glGetUniformLocation(getShader(), "vMat");
-    pLoc = glGetUniformLocation(getShader(), "pMat");
+    mLoc = glGetUniformLocation(shader, "mMat");
+    vLoc = glGetUniformLocation(shader, "vMat");
+    pLoc = glGetUniformLocation(shader, "pMat");
     glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(mMat));
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(vMat));
     glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(pMat));
 
-    /*std::cout << vbo << std::endl;
-    std::cout << "Jogoat?\n";*/
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
@@ -95,7 +92,6 @@ Tetrahedron::Tetrahedron(float *pos) {
 
 void Tetrahedron::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo) {
     GLuint shader = getShader();
-    //std::cout << shader << std::endl;
     glUseProgram(shader);
     
     tMat = glm::translate(glm::mat4(1.0f), getPositionV3());
@@ -109,12 +105,9 @@ void Tetrahedron::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuin
     glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(vMat));
     glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(pMat));
     
-    //std::cout << "vbo: " << vbo << std::endl;
-    //std::cout << "Jogoat?\n";
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
-    //std::cout << "vbo after glBindBuffer(): " << vbo << std::endl;
 
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);

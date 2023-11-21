@@ -9,11 +9,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-/*class IDrawable {
-public:
-    virtual void draw(double currentTime, GLuint vMat, GLuint pMat, int vboNum) = 0;
-};*/
-
 class DrawableObject {
 private:
     float *vertexCoordinates;
