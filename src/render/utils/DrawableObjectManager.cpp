@@ -3,10 +3,11 @@
 DrawableObjectManager::DrawableObjectManager() { 
     glGenVertexArrays(numVAOs, vao);
     glBindVertexArray(vao[0]);
+    currentIndex = 0;
 }
 
 void DrawableObjectManager::addObject(DrawableObject *obj) {
-    std::cout << "Pushing object into list...\n";
+    std::cout << "Pushing object into vector...\n";
     struct drawableChunk chunk;
     chunk.obj = obj;
     setupVertices(chunk);
@@ -24,30 +25,20 @@ void DrawableObjectManager::setupVertices(drawableChunk chunk) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
     chunk.vertexBuffer = vbosToGenerate[0];
-    objectList.push_back(chunk);
+
+    objectBuffer.push_back(chunk);
     std::cout << "Vertex buffers completely setup.\n";
-    initIterator();
 }
 
 DrawableObjectManager::drawableChunk DrawableObjectManager::getNext() {
-    drawableChunk chunk = *currentIndex;
+    drawableChunk chunk = objectBuffer.at(currentIndex);
 
-    if (objectList.size() > 1) {
-        if (currentIndex == objectList.end()) { currentIndex = objectList.begin(); }
-        else { currentIndex++; }
-    }
+    if ((currentIndex + 1) >= objectBuffer.size()) { currentIndex = 0; }
+    else { currentIndex++; }
 
     return chunk;
 }
 
 DrawableObject* DrawableObjectManager::getMostRecent() {
-    return objectList.back().obj;
-}
-
-// This function is needed to make sure we don't init currentIndex when the list is empty
-void DrawableObjectManager::initIterator() {
-    if (isIteratorInit) return;
-
-    currentIndex = objectList.begin();
-    isIteratorInit = true;
+    return objectBuffer.back().obj;
 }

@@ -1,7 +1,6 @@
 #ifndef DRAWABLEOBJECTMANAGER_H
 #define DRAWABLEOBJECTMANAGER_H
 
-#include <list>
 #include "../objects/DrawableObject.hpp"
 
 #define numVAOs 1
@@ -21,12 +20,10 @@ public:
     DrawableObject* getMostRecent();
 
 private:
-    std::list<drawableChunk> objectList;
-    std::list<drawableChunk>::iterator currentIndex;
+    std::vector<drawableChunk> objectBuffer;
+    int currentIndex;
     bool isIteratorInit = false;
     GLuint vao[numVAOs];
-
-    void initIterator();
 };
 
 #endif
