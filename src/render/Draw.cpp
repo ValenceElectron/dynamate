@@ -2,7 +2,6 @@
 
 Draw::Draw() {
     objLoader = new ObjectLoader(objManager);
-    //objLoader.addObject(objManager);
     pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
 }
 

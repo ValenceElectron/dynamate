@@ -26,12 +26,28 @@ void DrawableObjectManager::setupVertices(drawableChunk chunk) {
     chunk.vertexBuffer = vbosToGenerate[0];
     objectList.push_back(chunk);
     std::cout << "Vertex buffers completely setup.\n";
+    initIterator();
 }
 
 DrawableObjectManager::drawableChunk DrawableObjectManager::getNext() {
-    return objectList.front();
+    drawableChunk chunk = *currentIndex;
+
+    if (objectList.size() > 1) {
+        if (currentIndex == objectList.end()) { currentIndex = objectList.begin(); }
+        else { currentIndex++; }
+    }
+
+    return chunk;
 }
 
 DrawableObject* DrawableObjectManager::getMostRecent() {
     return objectList.back().obj;
+}
+
+// This function is needed to make sure we don't init currentIndex when the list is empty
+void DrawableObjectManager::initIterator() {
+    if (isIteratorInit) return;
+
+    currentIndex = objectList.begin();
+    isIteratorInit = true;
 }
