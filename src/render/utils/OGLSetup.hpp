@@ -14,20 +14,19 @@
 
 class OGLSetup {
 private:
-	static std::string readShaderFile(const char *filePath);
+	static std::string readShaderFile(std::string filePath);
 	static void printShaderLog(GLuint shader);
 	static void printProgramLog(int prog);
-	static GLuint prepareShader(int shaderTYPE, const char *shaderPath);
+	static GLuint prepareShader(int shaderTYPE, std::string shaderPath);
 	static int finalizeShaderProgram(GLuint sprogram);
 
 public:
 	OGLSetup();
 	static bool checkOpenGLError();
-	static GLuint createShaderProgram(const char *vp, const char *fp);
-	static GLuint createShaderProgram(const char *vp, const char *gp, const char *fp);
-	static GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp);
-	static GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, char *gp, const char *fp);
-    static void createProjectionMatrix(glm::mat4 &pMat);
+	static GLuint createShaderProgram(std::string vp, std::string fp);
+	static GLuint createShaderProgram(std::string vp, std::string gp, std::string fp);
+	static GLuint createShaderProgram(std::string vp, std::string tCS, std::string tES, std::string fp);
+	static GLuint createShaderProgram(std::string vp, std::string tCS, std::string tES, std::string gp, std::string fp);
 };
 
 #endif

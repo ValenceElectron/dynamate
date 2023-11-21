@@ -20,7 +20,7 @@ private:
     glm::mat4 pMat, vMat; 
 
     DrawableObjectManager objManager;
-    ObjectLoader objLoader;
+    ObjectLoader* objLoader;
 
     void SetupVertices();
     void DrawObject(double currentTime);

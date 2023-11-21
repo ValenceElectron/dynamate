@@ -1,9 +1,9 @@
 #include "Draw.hpp"
 
 Draw::Draw() {
-    objLoader.addObject(objManager);
+    objLoader = new ObjectLoader(objManager);
+    //objLoader.addObject(objManager);
     pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
-    std::cout << "Adding tetrahedron to object manager buffer...\n";
 }
 
 
@@ -20,10 +20,5 @@ void Draw::startDrawing(double currentTime) {
 
 void Draw::DrawObject(double currentTime) {
     DrawableObjectManager::drawableChunk chunk = objManager.getNext();
-    Tetrahedron* tet = dynamic_cast<Tetrahedron*>(chunk.obj);
-
-    int numV = tet->getNumberOfVertices();
-    float array[numV] = { 0 };
-    tet->getVertices(array);
-    tet->draw(currentTime, vMat, pMat, chunk.vertexBuffer);
+    chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer);
 }

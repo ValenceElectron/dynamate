@@ -5,16 +5,34 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "DrawableObjectManager.hpp"
 #include "OGLSetup.hpp"
 
 class ObjectLoader {
 public:
-    ObjectLoader();
-    void addObject(DrawableObjectManager& objManager);
+    ObjectLoader(DrawableObjectManager& objManager);
+    void addObject(DrawableObjectManager& objManager, DrawableObject* object);
+
+    struct LoadedData {
+        std::string numberOfVertices;
+        std::string vertices;
+        std::string position;
+        std::string filePath;
+        std::string vertexShader;
+        std::string fragmentShader;
+    };
 
 private:
-    //void loadObject(std::string filepath);
+    std::string sceneDirectory = "scenes/";
+    std::string defaultSceneFilePath = "scenes/default/";
+    std::string indexFile = "index.txt";
+
+    std::list<std::string> defaultFileContents;
+    
+    void scanDefaultDirectory();
+    LoadedData loadDefaults();
+    DrawableObject* deserialize(LoadedData data);
 };
 
 #endif
