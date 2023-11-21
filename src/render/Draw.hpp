@@ -1,4 +1,8 @@
+#ifndef DRAW_H
+#define DRAW_H
+
 #include "utils/DrawableObjectManager.hpp"
+#include "utils/ObjectLoader.hpp"
 #include "objects/DrawableObject.hpp"
 #include "utils/Camera.hpp"
 #include "utils/OGLSetup.hpp"
@@ -16,6 +20,7 @@ private:
     glm::mat4 pMat, vMat; 
 
     DrawableObjectManager objManager;
+    ObjectLoader* objLoader;
 
     void SetupVertices();
     void DrawObject(double currentTime);
@@ -24,3 +29,5 @@ public:
     Draw();
     void startDrawing(double currentTime);
 };
+
+#endif

@@ -12,7 +12,7 @@ using namespace std;
 
 OGLSetup::OGLSetup() {}
 
-string OGLSetup::readShaderFile(const char *filePath) {
+string OGLSetup::readShaderFile(string filePath) {
 	string content;
 	ifstream fileStream(filePath, ios::in);
 	string line = "";
@@ -48,7 +48,7 @@ void OGLSetup::printShaderLog(GLuint shader) {
 	}
 }
 
-GLuint OGLSetup::prepareShader(int shaderTYPE, const char *shaderPath)
+GLuint OGLSetup::prepareShader(int shaderTYPE, string shaderPath)
 {	GLint shaderCompiled;
 	string shaderStr = readShaderFile(shaderPath);
 	const char *shaderSrc = shaderStr.c_str();
@@ -94,7 +94,7 @@ int OGLSetup::finalizeShaderProgram(GLuint sprogram)
 	return sprogram;
 }
 
-GLuint OGLSetup::createShaderProgram(const char *vp, const char *fp) {
+GLuint OGLSetup::createShaderProgram(string vp, string fp) {
 	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
 	GLuint fShader = prepareShader(GL_FRAGMENT_SHADER, fp);
 	GLuint vfprogram = glCreateProgram();
@@ -104,7 +104,7 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *fp) {
 	return vfprogram;
 }
 
-GLuint OGLSetup::createShaderProgram(const char *vp, const char *gp, const char *fp) {
+GLuint OGLSetup::createShaderProgram(string vp, string gp, string fp) {
 	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
 	GLuint gShader = prepareShader(GL_GEOMETRY_SHADER, gp);
 	GLuint fShader = prepareShader(GL_FRAGMENT_SHADER, fp);
@@ -116,7 +116,7 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *gp, const char 
 	return vgfprogram;
 }
 
-GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp) {
+GLuint OGLSetup::createShaderProgram(string vp, string tCS, string tES, string fp) {
 	//printf("tess\n");
 	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
 	GLuint tcShader = prepareShader(GL_TESS_CONTROL_SHADER, tCS);
@@ -131,7 +131,7 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char
 	return vtfprogram;
 }
 
-GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char* tES, char *gp, const char *fp) {
+GLuint OGLSetup::createShaderProgram(string vp, string tCS, string tES, string gp, string fp) {
 	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
 	GLuint tcShader = prepareShader(GL_TESS_CONTROL_SHADER, tCS);
 	GLuint teShader = prepareShader(GL_TESS_EVALUATION_SHADER, tES);
@@ -145,9 +145,4 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char
 	glAttachShader(vtgfprogram, fShader);
 	finalizeShaderProgram(vtgfprogram);
 	return vtgfprogram;
-}
-
-void OGLSetup::createProjectionMatrix(glm::mat4 &pMat) {
-    // building perspective matrix
-    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
 }

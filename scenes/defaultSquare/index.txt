@@ -1,0 +1,6 @@
+#dynamo
+numberOfVertices:18
+vertices:-0.5,-0.5,0.0,0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,0.5,0.0,
+position:0.0,0.0,5.0,
+vertexShader:shaders/vertShader.glsl
+fragmentShader:shaders/fragShader.glsl

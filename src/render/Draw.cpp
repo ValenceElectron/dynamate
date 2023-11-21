@@ -1,14 +1,12 @@
 #include "Draw.hpp"
 
 Draw::Draw() {
-    currentShader = OGLSetup::createShaderProgram("render/shaders/vertShader.glsl", "render/shaders/fragShader.glsl");
-    std::cout << "Shader creation complete.\n";
-    OGLSetup::createProjectionMatrix(pMat);
-    std::cout << "Adding tetrahedron to object manager buffer...\n";
+    objLoader = new ObjectLoader(objManager);
+    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
 
-    float pos[3] = {0.0f, 0.0f, 5.0f};
-    objManager.addObject(new Tetrahedron(pos));
-    objManager.getMostRecent()->setShader(currentShader);
+    // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
+    // it handles the vertex buffers for all DrawableObjects in objManager at once.
+    objManager.setupVertexBuffers();
 }
 
 
@@ -24,11 +22,10 @@ void Draw::startDrawing(double currentTime) {
 }
 
 void Draw::DrawObject(double currentTime) {
-    DrawableObjectManager::drawableChunk chunk = objManager.getNext();
-    Tetrahedron* tet = dynamic_cast<Tetrahedron*>(chunk.obj);
-
-    int numV = tet->getNumberOfVertices();
-    float array[numV] = { 0 };
-    tet->getVertices(array);
-    tet->draw(currentTime, vMat, pMat, chunk.vertexBuffer);
+    int numberOfObjects = objManager.getNumberOfObjects();
+    for (int i = 0; i < numberOfObjects; i++) {
+        DrawableObjectManager::drawableChunk chunk = objManager.getNext();
+        //std::cout << "Drawing vertex buffer: " << chunk.vertexBuffer << std::endl;
+        chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
+    }
 }
