@@ -43,7 +43,7 @@ void initGLFW() {
 int main(void) {
     initGLFW();
     std::cout << "Initializing rendering pipeline...\n";
-    Draw draw(window, width, height);
+    Draw draw = Draw();
 
     std::cout << "Beginning main program loop...\n";
     while(!glfwWindowShouldClose(window)) {

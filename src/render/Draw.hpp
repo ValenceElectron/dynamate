@@ -9,18 +9,11 @@
 class Draw {
 private:
     GLuint currentShader;
-    GLuint vao[numVAOs];
-    GLuint vbo[numVBOs];
 
     Camera camera{0.0f, 0.0f, 10.0f};
     float cameraX, cameraY, cameraZ;
-    float objectLocX, objectLocY, objectLocZ;
-    int windowWidth, windowHeight, monitorX, monitorY;
-    int width, height;
 
-    GLuint mLoc, vLoc, pLoc;
-    float aspect;
-    glm::mat4 pMat, vMat, mMat, tMat, rMat;
+    glm::mat4 pMat, vMat; 
 
     DrawableObjectManager objManager;
 
@@ -28,7 +21,6 @@ private:
     void DrawObject(double currentTime);
 
 public:
-    Draw(GLFWwindow* window, int width, int height);
+    Draw();
     void startDrawing(double currentTime);
 };
-    //init(window);
