@@ -1,4 +1,4 @@
-#include "DrawableObjectManager.hpp"
+#include "utils/DrawableObjectManager.hpp"
 #include "objects/DrawableObject.hpp"
 #include "utils/Camera.hpp"
 #include "utils/OGLSetup.hpp"

@@ -2,7 +2,7 @@
 #define DRAWABLEOBJECTMANAGER_H
 
 #include <list>
-#include "objects/DrawableObject.hpp"
+#include "../objects/DrawableObject.hpp"
 
 #define numVAOs 1
 
