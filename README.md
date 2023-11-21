@@ -20,7 +20,7 @@ stored in the "scenes" dynamate/directory, sends them into the OpenGL rendering 
       - a comma separated array of floats. no spaces between.
       - every three floats make a single vertex, and they follow a "x,y,z" pattern.
     - position:0.0,3.0,5.0
-      - a comma separated array of flats, no spaces between.
+      - a comma separated array of floats, no spaces between.
       - these are xyz-coordinates.
       - the orthogonal perspective disregards the Z-value. X and Y are limited to between -5.0 and 5.0.
     - vertexShader:shaders/vertShader.glsl
