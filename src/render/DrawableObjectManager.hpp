@@ -20,11 +20,7 @@ public:
     DrawableObject* getMostRecent();
 
 private:
-    std::list<DrawableObject*> objectBuffer;
     std::list<drawableChunk> objectList;
-    std::vector<GLuint> vbo;
-    int numVBOs;
-    int numUsedVBOs;
     GLuint vao[numVAOs];
 };
 
