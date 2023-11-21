@@ -146,8 +146,3 @@ GLuint OGLSetup::createShaderProgram(const char *vp, const char *tCS, const char
 	finalizeShaderProgram(vtgfprogram);
 	return vtgfprogram;
 }
-
-void OGLSetup::createProjectionMatrix(glm::mat4 &pMat) {
-    // building perspective matrix
-    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
-}

@@ -1,14 +1,9 @@
 #include "Draw.hpp"
 
 Draw::Draw() {
-    currentShader = OGLSetup::createShaderProgram("render/shaders/vertShader.glsl", "render/shaders/fragShader.glsl");
-    std::cout << "Shader creation complete.\n";
-    OGLSetup::createProjectionMatrix(pMat);
+    objLoader.addObject(objManager);
+    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
     std::cout << "Adding tetrahedron to object manager buffer...\n";
-
-    float pos[3] = {0.0f, 0.0f, 5.0f};
-    objManager.addObject(new Tetrahedron(pos));
-    objManager.getMostRecent()->setShader(currentShader);
 }
 
 

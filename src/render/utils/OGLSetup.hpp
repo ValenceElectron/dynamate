@@ -1,3 +1,6 @@
+#ifndef OGLSETUP_H
+#define OGLSETUP_H
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
@@ -27,3 +30,4 @@ public:
     static void createProjectionMatrix(glm::mat4 &pMat);
 };
 
+#endif
