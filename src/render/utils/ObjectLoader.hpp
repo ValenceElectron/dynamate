@@ -14,7 +14,6 @@
 class ObjectLoader {
 public:
     ObjectLoader(DrawableObjectManager& objManager);
-    void addObject(DrawableObjectManager& objManager, DrawableObject* object);
 
     struct LoadedData {
         std::string numberOfVertices;
@@ -33,12 +32,17 @@ private:
     std::string chosenFilePath = "";
 
     std::list<std::string> fileContents;
+    std::list<std::string>::iterator fileContentIterator;
+    std::vector<LoadedData> sceneData;
+    std::vector<DrawableObject*> objects;
+    int numberOfObjectsInScene;
     
     void chooseScene();
     void listSceneDirectories();
     void scanDirectory();
-    LoadedData loadScene();
-    DrawableObject* deserialize(LoadedData data);
+    void loadScene();
+    void deserialize();
+    void addObjects(DrawableObjectManager& objManager);
 };
 
 #endif

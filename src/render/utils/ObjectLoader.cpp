@@ -4,16 +4,13 @@ ObjectLoader::ObjectLoader(DrawableObjectManager& objManager) {
     listSceneDirectories();
     chooseScene();
     scanDirectory();
-    LoadedData defaultData = loadScene();
-    DrawableObject* object = deserialize(defaultData);
-
-    addObject(objManager, object);
+    loadScene();
+    deserialize();
+    addObjects(objManager);
 }
 
 
-void ObjectLoader::addObject(DrawableObjectManager& objManager, DrawableObject* object) {
-    objManager.addObject(object);
-}
+
 
 void ObjectLoader::chooseScene() {
     int directoryIndex;
@@ -58,81 +55,115 @@ void ObjectLoader::scanDirectory() {
     if (line == "#dynamo") {
         while (!fileStream.eof()) {
             getline(fileStream, line);
-            std::cout << line << std::endl;
-            if (line != "") { fileContents.push_back(line); }
+            //std::cout << line << std::endl;
+            fileContents.push_back(line);
         }
         std::cout << "DYNAMO!\n";
     }
 }
 
-ObjectLoader::LoadedData ObjectLoader::loadScene() {
+void ObjectLoader::loadScene() {
     std::cout << "Reading index.txt...\n\n\n";
     std::string keyValueDelimiter = ":";
-    LoadedData data;
+    
+    fileContentIterator = fileContents.begin();
 
-    for (std::string string : fileContents) {
-        size_t delimPosition = string.find(keyValueDelimiter);
-        std::string key = string.substr(0, delimPosition);
-        std::string value = string.substr(delimPosition + 1, string.size() - 1);
-        //std::cout << key << " " << value << std::endl;
-        
-        if (key == "numberOfVertices") { data.numberOfVertices = value; }
-        else if (key == "vertices") { data.vertices = value; }
-        else if (key == "position") { data.position = value; }
-        else if (key == "vertexShader") { data.vertexShader = value; }
-        else if (key == "fragmentShader") { data.fragmentShader = value; }
-        else { std::cout << "Invalid key: " << key << std::endl; }
+    std::string numberOfObjects = *fileContentIterator;
+    size_t delimPos = numberOfObjects.find(keyValueDelimiter);
+    numberOfObjects = numberOfObjects.substr(delimPos + 1, numberOfObjects.size());
+    numberOfObjectsInScene = std::stoi(numberOfObjects);
+
+    std::cout << "Number of objects to load: " << numberOfObjectsInScene << "\n\n";
+
+    fileContentIterator++;
+
+    for (int i = 0; i < numberOfObjectsInScene; i++) {
+        LoadedData data;
+        fileContentIterator++;
+        std::cout << "Extracting object " << i + 1 << " data...\n";
+
+        while (*fileContentIterator != "endObject" && fileContentIterator != fileContents.end()) {
+            std::string string = *fileContentIterator;
+            size_t delimPosition = string.find(keyValueDelimiter);
+            std::string key = string.substr(0, delimPosition);
+            std::string value = string.substr(delimPosition + 1, string.size() - 1);
+            std::cout << key << " " << value << std::endl;
+
+            if (key == "numberOfVertices") { data.numberOfVertices = value; }
+            else if (key == "vertices") { data.vertices = value; }
+            else if (key == "position") { data.position = value; }
+            else if (key == "vertexShader") { data.vertexShader = value; }
+            else if (key == "fragmentShader") { data.fragmentShader = value; }
+            else if (key == "\n") { }
+            else if (key == "\0") { }
+            else { std::cout << "Invalid key: " << key << std::endl; }
+
+            fileContentIterator++;
+        }
+
+        data.filePath = chosenFilePath;
+        sceneData.push_back(data);
+        std::cout << "Object data loaded!\n";
     }
-
-    data.filePath = chosenFilePath;
-
-    return data;
 }
 
-DrawableObject* ObjectLoader::deserialize(LoadedData data) {
-    int numberOfVertices = 0;
-    float *vertices;
-    float position[3] = { 0 };
+void ObjectLoader::deserialize() {
     std::string arrayElementDelimiter = ",";
 
-    try {
-        numberOfVertices = std::stoi(data.numberOfVertices);
-        std::cout << "vertices: " << numberOfVertices << std::endl;
+    std::cout << "\n\nBeginning deserialization...\n\n";
 
-        vertices = new float[numberOfVertices];
-        std::stringstream vertexStream(data.vertices);
+    for (int i = 0; i < sceneData.size(); i++) {
+        int numberOfVertices = 0;
+        float *vertices;
+        float position[3] = { 0 };
+        LoadedData data = sceneData.at(i);
+        std::string vertexShader = data.filePath + data.vertexShader;
+        std::string fragmentShader = data.filePath + data.fragmentShader;
+        
+        try {
+            numberOfVertices = std::stoi(data.numberOfVertices);
+            std::cout << "vertices: " << numberOfVertices << std::endl;
 
-        int i = 0;
-        // i < numberOfVertices because an extra comma is added
-        // in the index.txt to make this loop go smoothly. without it, stof
-        // throws an error
-        while (vertexStream.good() && i < numberOfVertices) {
-            std::string substring = "";
-            getline(vertexStream, substring, ',');
-            vertices[i] = std::stof(substring);
-            std::cout << "vertexStream: " << vertices[i] << std::endl;
-            i++;
+            vertices = new float[numberOfVertices];
+            std::stringstream vertexStream(data.vertices);
+
+            int i = 0;
+            // i < numberOfVertices because an extra comma is added
+            // in the index.txt to make this loop go smoothly. without it, stof
+            // throws an error
+            while (vertexStream.good() && i < numberOfVertices) {
+                std::string substring = "";
+                getline(vertexStream, substring, ',');
+                vertices[i] = std::stof(substring);
+                std::cout << "vertexStream: " << vertices[i] << std::endl;
+                i++;
+            }
+
+            std::stringstream positionStream(data.position);
+            i = 0;
+            while (positionStream.good() && i < 3) {
+                std::string substring = "";
+                getline(positionStream, substring, ',');
+                position[i] = std::stof(substring);
+                std::cout << "position: " << position[i] << std::endl;
+                i++;
+            }
+
+        } catch (const std::exception &e) {
+            std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        std::stringstream positionStream(data.position);
-        i = 0;
-        while (positionStream.good() && i < 3) {
-            std::string substring = "";
-            getline(positionStream, substring, ',');
-            position[i] = std::stof(substring);
-            std::cout << "position: " << position[i] << std::endl;
-            i++;
-        }
-
-    } catch (const std::exception &e) {
-        std::cout << "ERROR: " << e.what() << std::endl;
+        DrawableObject* object = new DrawableObject(position, vertices, numberOfVertices);
+        object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
+        objects.push_back(object);
+        //std::cout << "\nObject loaded!\n";
     }
 
-    std::cout << "\nObject loaded!\n\n\n";
+    std::cout << "\nDeserialization finished!\n\n\n";
+}
 
-    DrawableObject* object = new DrawableObject(position, vertices, numberOfVertices);
-    std::string vertexShader = data.filePath + data.vertexShader;
-    std::string fragmentShader = data.filePath + data.fragmentShader;
-    object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
-    return object;
+void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
+    for (DrawableObject* object : objects) {
+        objManager.addObject(object);
+    }
 }
