@@ -51,13 +51,14 @@ void DrawableObject::getPosition(float *pos) {
 
 GLuint DrawableObject::getShader() { return shader; }
 
-void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo) {
+void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
     GLuint shader = getShader();
     glUseProgram(shader);
 
     tMat = glm::translate(glm::mat4(1.0f), getPositionV3()); // Translation matrix
-    rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotation Matrix
-    mMat = tMat * rMat; // Translation matrix * Rotation matrix = model matrix
+    mMat = tMat;
+    /*rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotation Matrix
+    mMat = tMat * rMat; // Translation matrix * Rotation matrix = model matrix*/
 
     mLoc = glGetUniformLocation(shader, "mMat");
     vLoc = glGetUniformLocation(shader, "vMat");
@@ -74,44 +75,5 @@ void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GL
     glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    glDrawArrays(GL_TRIANGLES, 0, 12);
-}
-
-Tetrahedron::Tetrahedron(float *pos) {
-    this->setPosition(pos);
-
-    float tetrahedron[36] = {
-        -0.5f, -0.5f, -0.5f,    0.0f, -0.5f, 0.5f,      0.0f, 0.5f, 0.0f,                                   // Forward-left tri
-        0.0f, -0.5f, 0.5f,      0.5f, -0.5f, -0.5f,     0.0f, 0.5f, 0.0f,                                   // Forward-right tri
-        0.5f, -0.5f, -0.5f,     -0.5f, -0.5f, -0.5f,    0.0f, 0.5f, 0.0f,                                   // Backward tri
-        0.0f, -0.5f, 0.5f,      -0.5f, -0.5f, -0.5f,    0.5f, -0.5f, -0.5f
-    };
-    this->setNumberOfVertices(36);
-    this->setVertices(tetrahedron);
-}
-
-void Tetrahedron::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo) {
-    GLuint shader = getShader();
-    glUseProgram(shader);
-    
-    tMat = glm::translate(glm::mat4(1.0f), getPositionV3());
-    rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f));
-    mMat = tMat * rMat;
-
-    mLoc = glGetUniformLocation(shader, "mMat");
-    vLoc = glGetUniformLocation(shader, "vMat");
-    pLoc = glGetUniformLocation(shader, "pMat");
-    glUniformMatrix4fv(mLoc, 1, GL_FALSE, glm::value_ptr(mMat));
-    glUniformMatrix4fv(vLoc, 1, GL_FALSE, glm::value_ptr(vMat));
-    glUniformMatrix4fv(pLoc, 1, GL_FALSE, glm::value_ptr(pMat));
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
-
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glDrawArrays(GL_TRIANGLES, 0, 12);
+    glDrawArrays(GL_TRIANGLES, 0, numberOfVertices/3);
 }

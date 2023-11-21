@@ -19,5 +19,5 @@ void Draw::startDrawing(double currentTime) {
 
 void Draw::DrawObject(double currentTime) {
     DrawableObjectManager::drawableChunk chunk = objManager.getNext();
-    chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer);
+    chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
 }

@@ -35,13 +35,7 @@ public:
     glm::vec3 getPositionV3();
     GLuint getShader();
 
-    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo);
-};
-
-class Tetrahedron : public DrawableObject {
-public:
-    Tetrahedron(float *pos);
-    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo);
+    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices);
 };
 
 #endif
