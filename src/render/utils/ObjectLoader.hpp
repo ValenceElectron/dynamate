@@ -3,6 +3,8 @@
 
 #include <string>
 #include <list>
+#include <vector>
+#include <filesystem>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -26,12 +28,16 @@ public:
 private:
     std::string sceneDirectory = "scenes/";
     std::string defaultSceneFilePath = "scenes/default/";
+    std::vector<std::string> sceneDirectories;
     std::string indexFile = "index.txt";
+    std::string chosenFilePath = "";
 
-    std::list<std::string> defaultFileContents;
+    std::list<std::string> fileContents;
     
-    void scanDefaultDirectory();
-    LoadedData loadDefaults();
+    void chooseScene();
+    void listSceneDirectories();
+    void scanDirectory();
+    LoadedData loadScene();
     DrawableObject* deserialize(LoadedData data);
 };
 

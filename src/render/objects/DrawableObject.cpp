@@ -48,7 +48,6 @@ void DrawableObject::getPosition(float *pos) {
    }
 }
 
-
 GLuint DrawableObject::getShader() { return shader; }
 
 void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
