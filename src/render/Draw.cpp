@@ -3,6 +3,7 @@
 Draw::Draw() {
     objLoader = new ObjectLoader(objManager);
     pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
+    objManager.setupVertexBuffers();
 }
 
 
@@ -18,6 +19,10 @@ void Draw::startDrawing(double currentTime) {
 }
 
 void Draw::DrawObject(double currentTime) {
-    DrawableObjectManager::drawableChunk chunk = objManager.getNext();
-    chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
+    int numberOfObjects = objManager.getNumberOfObjects();
+    for (int i = 0; i < numberOfObjects; i++) {
+        DrawableObjectManager::drawableChunk chunk = objManager.getNext();
+        //std::cout << "Drawing vertex buffer: " << chunk.vertexBuffer << std::endl;
+        chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
+    }
 }
