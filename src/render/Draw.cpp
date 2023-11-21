@@ -3,6 +3,9 @@
 Draw::Draw() {
     objLoader = new ObjectLoader(objManager);
     pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
+
+    // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
+    // it handles the vertex buffers for all DrawableObjects in objManager at once.
     objManager.setupVertexBuffers();
 }
 
