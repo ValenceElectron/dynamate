@@ -108,6 +108,7 @@ void ObjectLoader::loadScene() {
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
             else if (key == "uiBounds") { data.uiBounds = value; }
+            else if (key == "scale") { data.scale = value; }
             else if (key == "vertexShader") { data.vertexShader = value; }
             else if (key == "fragmentShader") { data.fragmentShader = value; }
             else if (key == "\n") { }
@@ -169,7 +170,9 @@ void ObjectLoader::deserialize() {
             std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        DrawableObject* object = new DrawableObject(data.objectType, position, vertices, numberOfVertices);
+        float objectScale = std::stof(data.scale);
+
+        DrawableObject* object = new DrawableObject(data.objectType, position, objectScale, vertices, numberOfVertices);
         object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         objects.push_back(object);
         //std::cout << "\nObject loaded!\n";
@@ -235,7 +238,9 @@ void ObjectLoader::deserializeUI() {
             std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, vertices, numberOfVertices, uiBounds);
+        float objectScale = std::stof(data.scale);
+
+        UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
         element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         elements.push_back(element);
         //std::cout << "\nObject loaded!\n";

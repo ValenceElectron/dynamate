@@ -21,6 +21,7 @@ public:
         std::string vertices;
         std::string position;
         std::string uiBounds;
+        std::string scale;
         std::string filePath;
         std::string vertexShader;
         std::string fragmentShader;

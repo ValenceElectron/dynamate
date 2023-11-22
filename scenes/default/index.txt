@@ -4,6 +4,7 @@ objects:2
 numberOfVertices:9
 vertices:-0.5,-0.5,0.0,0.5,-0.5,0.0,0.0,0.5,0.0
 position:0.0,3.0,5.0,
+scale:10.0
 vertexShader:shaders/vertShader.glsl
 fragmentShader:shaders/fragShader.glsl
 endObject
@@ -11,6 +12,7 @@ endObject
 numberOfVertices:18
 vertices:-0.5,0.0,0.0,0.5,0.0,0.0,0.0,0.5,0.0,-0.5,0.0,0.0,0.0,-0.5,0.0,0.5,0.0,0.0
 position:0.0,0.0,5.0
+scale:10.0
 vertexShader:shaders/vertShader.glsl
 fragmentShader:shaders/fragShader.glsl
 endObject
