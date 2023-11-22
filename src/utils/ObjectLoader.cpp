@@ -1,16 +1,29 @@
 #include "ObjectLoader.hpp"
 
 ObjectLoader::ObjectLoader(DrawableObjectManager& objManager) {
+    // Do these calls once to load up the scene specified by the user, then another time
+    // using chosenFilePath = "src/ui/" to load up the ui.
     listSceneDirectories();
     chooseScene();
     scanDirectory();
     loadScene();
     deserialize();
     addObjects(objManager);
+
+    prepareForLoadingUI();
+    scanDirectory();
+    loadScene();
+    deserialize();
+    addUIElements(objManager);
 }
 
-
-
+void ObjectLoader::prepareForLoadingUI() {
+    chosenFilePath = "src/ui/";
+    fileContents.clear();
+    sceneData.clear();
+    objects.clear();
+    numberOfObjectsInScene = 0;
+}
 
 void ObjectLoader::chooseScene() {
     int directoryIndex;
@@ -165,5 +178,13 @@ void ObjectLoader::deserialize() {
 void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
     for (DrawableObject* object : objects) {
         objManager.addObject(object);
+    }
+}
+
+void ObjectLoader::addUIElements(DrawableObjectManager& objManager) {
+    for (DrawableObject* object : objects) {
+        UserInterfaceElement* element = dynamic_cast<UserInterfaceElement*>(object);
+        std::cout << "numberOfVertices: " << element->getNumberOfVertices() << std::endl;
+        objManager.addElement(element);
     }
 }

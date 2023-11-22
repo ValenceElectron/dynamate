@@ -1,8 +1,8 @@
 #include "DrawableObjectManager.hpp"
 
 DrawableObjectManager::DrawableObjectManager() { 
-
-    currentIndex = 0;
+    currentDrawableIndex = 0;
+    currentUIIndex = 0;
 }
 
 void DrawableObjectManager::addObject(DrawableObject *obj) {
@@ -13,10 +13,10 @@ void DrawableObjectManager::addObject(DrawableObject *obj) {
 }
 
 DrawableObjectManager::drawableChunk DrawableObjectManager::getNext() {
-    drawableChunk chunk = objectBuffer.at(currentIndex);
+    drawableChunk chunk = objectBuffer.at(currentDrawableIndex);
 
-    if ((currentIndex + 1) >= objectBuffer.size()) { currentIndex = 0; }
-    else { currentIndex++; }
+    if ((currentDrawableIndex + 1) >= objectBuffer.size()) { currentDrawableIndex = 0; }
+    else { currentDrawableIndex++; }
 
     return chunk;
 }
@@ -25,8 +25,27 @@ int DrawableObjectManager::getNumberOfObjects() {
     return (int) objectBuffer.size();
 }
 
-DrawableObject* DrawableObjectManager::getMostRecent() {
-    return objectBuffer.back().obj;
+void DrawableObjectManager::addElement(UserInterfaceElement *element) {
+    struct uiChunk chunk;
+    chunk.element = element;
+    uiBuffer.push_back(chunk);
+}
+
+DrawableObjectManager::uiChunk DrawableObjectManager::getNextUI() {
+    uiChunk chunk = uiBuffer.at(currentUIIndex);
+
+    if ((currentUIIndex + 1) >= uiBuffer.size()) { currentUIIndex = 0; }
+    else { currentUIIndex++; }
+    
+    return chunk;
+}
+
+int DrawableObjectManager::getNumberOfElements() {
+    return uiBuffer.size();
+}
+
+void DrawableObjectManager::handleMouseClick() {
+    
 }
 
 void DrawableObjectManager::setupVertexBuffers() {
@@ -34,19 +53,34 @@ void DrawableObjectManager::setupVertexBuffers() {
     glBindVertexArray(vao[0]);
 
     std::cout << "Generating vertex buffers...\n";
-    int numberOfObjects = objectBuffer.size();
+    int numberOfObjects = objectBuffer.size() + uiBuffer.size();
+    std::cout << "Number of buffers to generate: " << numberOfObjects << std::endl;
     GLuint vbosToGenerate[numberOfObjects];
     glGenBuffers(numberOfObjects, vbosToGenerate);
 
     for (int i = 0; i < numberOfObjects; i++) {
-        DrawableObjectManager::drawableChunk *chunk = &objectBuffer.at(i);
-        float verts[chunk->obj->getNumberOfVertices()] = { 0 };
-        chunk->obj->getVertices(verts);
-        glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+        if (i < objectBuffer.size()) {
+            DrawableObjectManager::drawableChunk *chunk = &objectBuffer.at(i);
+            float verts[chunk->obj->getNumberOfVertices()] = { 0 };
+            chunk->obj->getVertices(verts);
+            glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
-        std::cout << "Vertex buffer: " << vbosToGenerate[i] << std::endl;
-        chunk->vertexBuffer = vbosToGenerate[i];
+            std::cout << "Vertex buffer: " << vbosToGenerate[i] << std::endl;
+            chunk->vertexBuffer = vbosToGenerate[i];
+        } else {
+            int j = i - objectBuffer.size();
+            DrawableObjectManager::uiChunk *chunk = &uiBuffer.at(j);
+            float verts[chunk->element->getNumberOfVertices()] = { 0 };
+            std::cout << "verts or number?\n";
+            chunk->element->getVertices(verts);
+            std::cout << "It's the glBindBuffer\n";
+            glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+            std::cout << "Vertex buffer: " << vbosToGenerate[i] << std::endl;
+            chunk->vertexBuffer = vbosToGenerate[i];
+        }
     }
 }
 

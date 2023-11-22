@@ -30,4 +30,10 @@ void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager) {
         //std::cout << "Drawing vertex buffer: " << chunk.vertexBuffer << std::endl;
         chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
     }
+
+    int numberOfElements = objManager.getNumberOfElements();
+    for (int i = 0; i < numberOfElements; i++) {
+        DrawableObjectManager::uiChunk chunk = objManager.getNextUI();
+        chunk.element->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.element->getNumberOfVertices());
+    }
 }

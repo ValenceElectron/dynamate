@@ -37,12 +37,14 @@ private:
     std::vector<DrawableObject*> objects;
     int numberOfObjectsInScene;
     
+    void prepareForLoadingUI();
     void chooseScene();
     void listSceneDirectories();
     void scanDirectory();
     void loadScene();
     void deserialize();
     void addObjects(DrawableObjectManager& objManager);
+    void addUIElements(DrawableObjectManager& objManager);
 };
 
 #endif

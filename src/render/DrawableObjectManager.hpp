@@ -2,6 +2,7 @@
 #define DRAWABLEOBJECTMANAGER_H
 
 #include "objects/DrawableObject.hpp"
+#include "objects/UserInterfaceElement.hpp"
 
 #define numVAOs 1
 
@@ -11,19 +12,30 @@ public:
         DrawableObject* obj;
         GLuint vertexBuffer;
     };
+
+    struct uiChunk {
+        UserInterfaceElement* element;
+        GLuint vertexBuffer;
+    };
+
     DrawableObjectManager();
 
     void addObject(DrawableObject *obj);
     drawableChunk getNext();
     int getNumberOfObjects();
-    DrawableObject* getMostRecent();
+
+    void addElement(UserInterfaceElement *element);
+    uiChunk getNextUI();
+    int getNumberOfElements();
+    void handleMouseClick();
 
     void setupVertexBuffers();
 
 private:
     std::vector<drawableChunk> objectBuffer;
-    int currentIndex;
-    bool isIteratorInit = false;
+    std::vector<uiChunk> uiBuffer;
+    int currentDrawableIndex;
+    int currentUIIndex;
     GLuint vao[numVAOs];
 };
 
