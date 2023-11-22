@@ -13,7 +13,7 @@ DrawableObjectManager objManager;
 
 void initGLFW() {
     std::cout << "Initializing...\n";
-    if (!glfwInit()) {exit(EXIT_FAILURE);}
+    if (!glfwInit()) {exit(EXIT_FAILURE);} // this line needs to be called before any OpenGL calls. Make sure this happens before anything.
 
     int count;
     GLFWmonitor** monitors = glfwGetMonitors(&count);
