@@ -1,7 +1,7 @@
 #ifndef DRAWABLEOBJECTMANAGER_H
 #define DRAWABLEOBJECTMANAGER_H
 
-#include "../objects/DrawableObject.hpp"
+#include "objects/DrawableObject.hpp"
 
 #define numVAOs 1
 

@@ -3,7 +3,7 @@
 
 #include "utils/DrawableObjectManager.hpp"
 #include "utils/ObjectLoader.hpp"
-#include "objects/DrawableObject.hpp"
+#include "utils/objects/DrawableObject.hpp"
 #include "utils/Camera.hpp"
 #include "utils/OGLSetup.hpp"
 
