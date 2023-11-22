@@ -19,15 +19,14 @@ private:
 
     glm::mat4 pMat, vMat; 
 
-    DrawableObjectManager objManager;
+    //DrawableObjectManager objManager;
     ObjectLoader* objLoader;
 
-    void SetupVertices();
-    void DrawObject(double currentTime);
+    void drawObjects(double currentTime, DrawableObjectManager& objManager);
 
 public:
-    Draw();
-    void startDrawing(double currentTime);
+    Draw(DrawableObjectManager& objManager);
+    void startDrawing(double currentTime, DrawableObjectManager& objManager);
 };
 
 #endif

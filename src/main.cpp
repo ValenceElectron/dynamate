@@ -1,8 +1,7 @@
 // Dynamate is a software that adds an animated character to your desktop
 #include "render/Draw.hpp"
-
-#define numVAOs 1
-#define numVBOs 1
+#include "render/utils/DrawableObjectManager.hpp"
+#include "render/utils/OGLSetup.hpp"
 
 int windowWidth, windowHeight, monitorX, monitorY;
 int width, height;
@@ -43,11 +42,12 @@ void initGLFW() {
 int main(void) {
     initGLFW();
     std::cout << "Initializing rendering pipeline...\n";
-    Draw draw = Draw();
+    DrawableObjectManager objManager;
+    Draw draw = Draw(objManager);
 
     std::cout << "Beginning main program loop...\n";
     while(!glfwWindowShouldClose(window)) {
-        draw.startDrawing(glfwGetTime());
+        draw.startDrawing(glfwGetTime(), objManager);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

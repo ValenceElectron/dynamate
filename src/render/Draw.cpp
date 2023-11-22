@@ -1,6 +1,6 @@
 #include "Draw.hpp"
 
-Draw::Draw() {
+Draw::Draw(DrawableObjectManager& objManager) {
     objLoader = new ObjectLoader(objManager);
     pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
 
@@ -10,18 +10,20 @@ Draw::Draw() {
 }
 
 
-void Draw::startDrawing(double currentTime) {
+void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager) {
     glClear(GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // vMat gets defined here in case we want any camera movement. vMat needs to get updated every frame
+    // when we move the camera
     vMat = glm::inverse(glm::mat4(camera.GetU(), camera.GetV(), camera.GetN(), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)))
             * glm::translate(glm::mat4(1.0f), glm::vec3(-camera.GetC().x, -camera.GetC().y, -camera.GetC().z));
 
-    DrawObject(currentTime);
+    drawObjects(currentTime, objManager);
 }
 
-void Draw::DrawObject(double currentTime) {
+void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager) {
     int numberOfObjects = objManager.getNumberOfObjects();
     for (int i = 0; i < numberOfObjects; i++) {
         DrawableObjectManager::drawableChunk chunk = objManager.getNext();
