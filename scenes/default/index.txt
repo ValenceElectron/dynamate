@@ -1,5 +1,5 @@
 #dynamo
-objects:2
+objects:3
 
 numberOfVertices:9
 vertices:-0.5,-0.5,0.0,0.5,-0.5,0.0,0.0,0.5,0.0
@@ -11,6 +11,13 @@ endObject
 numberOfVertices:18
 vertices:-0.5,-0.5,0.0,0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,0.5,0.0
 position:0.0,-2.0,5.0,
+vertexShader:shaders/vertShader.glsl
+fragmentShader:shaders/fragShader.glsl
+endObject
+
+numberOfVertices:18
+vertices:-0.5,0.0,0.0,0.5,0.0,0.0,0.0,0.5,0.0,-0.5,0.0,0.0,0.0,-0.5,0.0,0.5,0.0,0.0
+position:0.0,0.0,5.0
 vertexShader:shaders/vertShader.glsl
 fragmentShader:shaders/fragShader.glsl
 endObject
