@@ -2,11 +2,14 @@
 #include "render/Draw.hpp"
 #include "render/utils/DrawableObjectManager.hpp"
 #include "render/utils/OGLSetup.hpp"
+#include <optional>
 
 int windowWidth, windowHeight, monitorX, monitorY;
 int width, height;
 
 GLFWwindow* window;
+
+DrawableObjectManager objManager;
 
 void initGLFW() {
     std::cout << "Initializing...\n";
@@ -42,7 +45,6 @@ void initGLFW() {
 int main(void) {
     initGLFW();
     std::cout << "Initializing rendering pipeline...\n";
-    DrawableObjectManager objManager;
     Draw draw = Draw(objManager);
 
     std::cout << "Beginning main program loop...\n";

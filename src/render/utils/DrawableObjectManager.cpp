@@ -1,8 +1,7 @@
 #include "DrawableObjectManager.hpp"
 
 DrawableObjectManager::DrawableObjectManager() { 
-    glGenVertexArrays(numVAOs, vao);
-    glBindVertexArray(vao[0]);
+
     currentIndex = 0;
 }
 
@@ -31,6 +30,9 @@ DrawableObject* DrawableObjectManager::getMostRecent() {
 }
 
 void DrawableObjectManager::setupVertexBuffers() {
+    glGenVertexArrays(numVAOs, vao);
+    glBindVertexArray(vao[0]);
+
     std::cout << "Generating vertex buffers...\n";
     int numberOfObjects = objectBuffer.size();
     GLuint vbosToGenerate[numberOfObjects];
