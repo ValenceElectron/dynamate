@@ -50,3 +50,7 @@ void DrawableObjectManager::setupVertexBuffers() {
     }
 }
 
+int checkMouseClick(double x, double y) {
+
+}
+

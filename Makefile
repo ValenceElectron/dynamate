@@ -1,4 +1,4 @@
-FILES = ./src/main.cpp ./src/render/Draw.hpp ./src/render/Draw.cpp ./src/render/utils/Camera.hpp ./src/render/utils/Camera.cpp ./src/render/utils/OGLSetup.hpp ./src/render/utils/OGLSetup.cpp ./src/render/objects/DrawableObject.hpp ./src/render/objects/DrawableObject.cpp ./src/render/utils/DrawableObjectManager.hpp ./src/render/utils/DrawableObjectManager.cpp ./src/render/utils/ObjectLoader.hpp ./src/render/utils/ObjectLoader.cpp
+FILES = ./src/main.cpp ./src/Draw.hpp ./src/Draw.cpp ./src/utils/Camera.hpp ./src/utils/Camera.cpp ./src/utils/OGLSetup.hpp ./src/utils/OGLSetup.cpp ./src/objects/DrawableObject.hpp ./src/objects/DrawableObject.cpp ./src/utils/DrawableObjectManager.hpp ./src/utils/DrawableObjectManager.cpp ./src/utils/ObjectLoader.hpp ./src/utils/ObjectLoader.cpp
 CFLAGS = -std=c++17
 LDFLAGS = -lglfw -lGLEW -lGL -lGLU
 

@@ -18,16 +18,15 @@ public:
     int getNumberOfObjects();
     DrawableObject* getMostRecent();
 
-    void setupVertices(drawableChunk chunk);
     void setupVertexBuffers();
+
+    int checkMouseClick(double x, double y);
 
 private:
     std::vector<drawableChunk> objectBuffer;
     int currentIndex;
     bool isIteratorInit = false;
     GLuint vao[numVAOs];
-
-    void getObjectAtIndex(int index);
 };
 
 #endif
