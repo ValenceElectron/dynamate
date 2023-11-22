@@ -1,9 +1,9 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include "utils/DrawableObjectManager.hpp"
+#include "render/DrawableObjectManager.hpp"
 #include "utils/ObjectLoader.hpp"
-#include "utils/objects/DrawableObject.hpp"
+#include "render/objects/DrawableObject.hpp"
 #include "utils/Camera.hpp"
 #include "utils/OGLSetup.hpp"
 

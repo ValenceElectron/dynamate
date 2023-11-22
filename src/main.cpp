@@ -1,6 +1,6 @@
 // Dynamate is a software that adds an animated character to your desktop
 #include "Draw.hpp"
-#include "utils/DrawableObjectManager.hpp"
+#include "render/DrawableObjectManager.hpp"
 #include "utils/OGLSetup.hpp"
 
 int windowWidth, windowHeight, monitorX, monitorY;

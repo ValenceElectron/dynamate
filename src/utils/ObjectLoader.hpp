@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "DrawableObjectManager.hpp"
+#include "../render/DrawableObjectManager.hpp"
 #include "OGLSetup.hpp"
 
 class ObjectLoader {

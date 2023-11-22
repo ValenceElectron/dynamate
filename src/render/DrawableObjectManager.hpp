@@ -20,8 +20,6 @@ public:
 
     void setupVertexBuffers();
 
-    int checkMouseClick(double x, double y);
-
 private:
     std::vector<drawableChunk> objectBuffer;
     int currentIndex;
