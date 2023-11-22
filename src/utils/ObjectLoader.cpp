@@ -92,6 +92,7 @@ void ObjectLoader::loadScene() {
 
     for (int i = 0; i < numberOfObjectsInScene; i++) {
         LoadedData data;
+        data.objectType = "drawable"; //objectType currently only used for UserInterfaceElement. This is here to not cause DrawableObject errors
         fileContentIterator++;
         std::cout << "Extracting object " << i + 1 << " data...\n";
 
@@ -102,7 +103,8 @@ void ObjectLoader::loadScene() {
             std::string value = string.substr(delimPosition + 1, string.size() - 1);
             std::cout << key << " " << value << std::endl;
 
-            if (key == "numberOfVertices") { data.numberOfVertices = value; }
+            if (key == "objectType") { data.objectType = value; }
+            else if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
             else if (key == "uiBounds") { data.uiBounds = value; }
@@ -167,7 +169,7 @@ void ObjectLoader::deserialize() {
             std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        DrawableObject* object = new DrawableObject(position, vertices, numberOfVertices);
+        DrawableObject* object = new DrawableObject(data.objectType, position, vertices, numberOfVertices);
         object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         objects.push_back(object);
         //std::cout << "\nObject loaded!\n";
@@ -233,7 +235,7 @@ void ObjectLoader::deserializeUI() {
             std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        UserInterfaceElement* element = new UserInterfaceElement(position, vertices, numberOfVertices, uiBounds);
+        UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, vertices, numberOfVertices, uiBounds);
         element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         elements.push_back(element);
         //std::cout << "\nObject loaded!\n";

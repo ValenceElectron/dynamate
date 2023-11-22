@@ -1,7 +1,7 @@
 #include "UserInterfaceElement.hpp"
 
-UserInterfaceElement::UserInterfaceElement(float *pos, float *vertices, int numberOfVertices, double *buttonBounds)
-: DrawableObject(pos, vertices, numberOfVertices) {
+UserInterfaceElement::UserInterfaceElement(std::string objType, float *pos, float *vertices, int numberOfVertices, double *buttonBounds)
+: DrawableObject(objType, pos, vertices, numberOfVertices) {
     setButtonBounds(buttonBounds);
 }
 
@@ -17,7 +17,9 @@ void UserInterfaceElement::setButtonBounds(double *array) {
     for (int i = 0; i < 4; i++) { buttonBounds[i] = array[i]; }
 }
 
-void UserInterfaceElement::isClicked(double x, double y) { }
+void UserInterfaceElement::isClicked(double x, double y) { 
+    std::cout << "Click!\n";
+}
 
 void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
     if (isVisible()) {

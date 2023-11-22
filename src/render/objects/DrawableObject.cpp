@@ -2,7 +2,9 @@
 
 DrawableObject::DrawableObject() { }
 
-DrawableObject::DrawableObject(float *pos, float *vertices, int numberOfVertices) {
+DrawableObject::DrawableObject(std::string objType, float *pos, float *vertices, int numberOfVertices) {
+    objectType = objType;
+
     for (int i = 0; i < 3; i++) {
         position[i] = pos[i];
     }
@@ -49,6 +51,8 @@ void DrawableObject::getPosition(float *pos) {
 }
 
 GLuint DrawableObject::getShader() { return shader; }
+
+std::string DrawableObject::getObjectType() { return objectType; }
 
 void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
     GLuint shader = getShader();

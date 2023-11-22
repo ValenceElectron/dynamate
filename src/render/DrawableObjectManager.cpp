@@ -46,7 +46,7 @@ int DrawableObjectManager::getNumberOfElements() {
 }
 
 void DrawableObjectManager::handleMouseClick() {
-    
+     
 }
 
 void DrawableObjectManager::setupVertexBuffers() {

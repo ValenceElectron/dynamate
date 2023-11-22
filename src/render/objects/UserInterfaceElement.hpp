@@ -8,7 +8,7 @@
 
 class UserInterfaceElement : public DrawableObject {
 public:
-    UserInterfaceElement(float *pos, float *vertices, int numberOfVertices, double *buttonBounds);
+    UserInterfaceElement(std::string objType, float *pos, float *vertices, int numberOfVertices, double *buttonBounds);
 
     void getButtonBounds(double *array);
     bool isVisible();

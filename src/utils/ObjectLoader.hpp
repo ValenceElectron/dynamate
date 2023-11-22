@@ -16,6 +16,7 @@ public:
     ObjectLoader(DrawableObjectManager& objManager);
 
     struct LoadedData {
+        std::string objectType;
         std::string numberOfVertices;
         std::string vertices;
         std::string position;
