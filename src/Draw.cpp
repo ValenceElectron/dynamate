@@ -33,7 +33,7 @@ void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager) {
 
     int numberOfElements = objManager.getNumberOfElements();
     for (int i = 0; i < numberOfElements; i++) {
-        DrawableObjectManager::uiChunk chunk = objManager.getNextUI();
-        chunk.element->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.element->getNumberOfVertices());
+        DrawableObjectManager::uiChunk* chunk = objManager.getNextUI();
+        chunk->element->draw(currentTime, vMat, pMat, chunk->vertexBuffer, chunk->element->getNumberOfVertices());
     }
 }

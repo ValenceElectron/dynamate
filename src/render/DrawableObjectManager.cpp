@@ -31,12 +31,13 @@ void DrawableObjectManager::addElement(UserInterfaceElement *element) {
     uiBuffer.push_back(chunk);
 }
 
-DrawableObjectManager::uiChunk DrawableObjectManager::getNextUI() {
-    uiChunk chunk = uiBuffer.at(currentUIIndex);
+DrawableObjectManager::uiChunk* DrawableObjectManager::getNextUI() {
+    if (!uiBuffer.at(currentUIIndex).element->isVisible()) { uiBuffer.at(currentUIIndex).element->setVisibility(true); }
+    uiChunk* chunk = &uiBuffer.at(currentUIIndex);
 
     if ((currentUIIndex + 1) >= uiBuffer.size()) { currentUIIndex = 0; }
     else { currentUIIndex++; }
-    
+
     return chunk;
 }
 
@@ -72,9 +73,7 @@ void DrawableObjectManager::setupVertexBuffers() {
             int j = i - objectBuffer.size();
             DrawableObjectManager::uiChunk *chunk = &uiBuffer.at(j);
             float verts[chunk->element->getNumberOfVertices()] = { 0 };
-            std::cout << "verts or number?\n";
             chunk->element->getVertices(verts);
-            std::cout << "It's the glBindBuffer\n";
             glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
             glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 

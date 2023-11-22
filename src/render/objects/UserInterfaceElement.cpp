@@ -11,7 +11,7 @@ void UserInterfaceElement::getButtonBounds(double *array) {
 
 bool UserInterfaceElement::isVisible() { return visible; }
 
-void UserInterfaceElement::toggleVisibility() { visible != visible; }
+void UserInterfaceElement::setVisibility(bool vis) { visible = vis; }
 
 void UserInterfaceElement::setButtonBounds(double *array) {
     for (int i = 0; i < 4; i++) { buttonBounds[i] = array[i]; }
@@ -20,7 +20,7 @@ void UserInterfaceElement::setButtonBounds(double *array) {
 void UserInterfaceElement::isClicked(double x, double y) { }
 
 void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
-    if (visible) {
+    if (isVisible()) {
         GLuint shader = getShader();
         glUseProgram(shader);
 

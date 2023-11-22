@@ -13,7 +13,7 @@ ObjectLoader::ObjectLoader(DrawableObjectManager& objManager) {
     prepareForLoadingUI();
     scanDirectory();
     loadScene();
-    deserialize();
+    deserializeUI();
     addUIElements(objManager);
 }
 
@@ -105,6 +105,7 @@ void ObjectLoader::loadScene() {
             if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
+            else if (key == "uiBounds") { data.uiBounds = value; }
             else if (key == "vertexShader") { data.vertexShader = value; }
             else if (key == "fragmentShader") { data.fragmentShader = value; }
             else if (key == "\n") { }
@@ -175,6 +176,72 @@ void ObjectLoader::deserialize() {
     std::cout << "\nDeserialization finished!\n\n\n";
 }
 
+void ObjectLoader::deserializeUI() {
+    std::string arrayElementDelimiter = ",";
+
+    std::cout << "\n\nBeginning UI deserialization...\n\n";
+
+    for (int i = 0; i < sceneData.size(); i++) {
+        int numberOfVertices = 0;
+        float *vertices;
+        float position[3] = { 0 };
+        double uiBounds[4] = { 0 };
+        LoadedData data = sceneData.at(i);
+        std::string vertexShader = data.filePath + data.vertexShader;
+        std::string fragmentShader = data.filePath + data.fragmentShader;
+        
+        try {
+            numberOfVertices = std::stoi(data.numberOfVertices);
+            std::cout << "vertices: " << numberOfVertices << std::endl;
+
+            vertices = new float[numberOfVertices];
+            std::stringstream vertexStream(data.vertices);
+
+            int i = 0;
+            // i < numberOfVertices because an extra comma is added
+            // in the index.txt to make this loop go smoothly. without it, stof
+            // throws an error
+            while (vertexStream.good() && i < numberOfVertices) {
+                std::string substring = "";
+                getline(vertexStream, substring, ',');
+                vertices[i] = std::stof(substring);
+                std::cout << "vertexStream: " << vertices[i] << std::endl;
+                i++;
+            }
+
+            std::stringstream uiBoundsStream(data.uiBounds);
+            i = 0;
+            while(uiBoundsStream.good() && i < 4) {
+                std::string substring = "";
+                getline(uiBoundsStream, substring, ',');
+                uiBounds[i] = std::stod(substring);
+                std::cout << "UI boundary: " << uiBounds[i] << std::endl;
+                i++;
+            }
+
+            std::stringstream positionStream(data.position);
+            i = 0;
+            while (positionStream.good() && i < 3) {
+                std::string substring = "";
+                getline(positionStream, substring, ',');
+                position[i] = std::stof(substring);
+                std::cout << "position: " << position[i] << std::endl;
+                i++;
+            }
+
+        } catch (const std::exception &e) {
+            std::cout << "ERROR: " << e.what() << std::endl;
+        }
+
+        UserInterfaceElement* element = new UserInterfaceElement(position, vertices, numberOfVertices, uiBounds);
+        element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
+        elements.push_back(element);
+        //std::cout << "\nObject loaded!\n";
+    }
+
+    std::cout << "\nUI deserialization finished!\n\n\n";
+}
+
 void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
     for (DrawableObject* object : objects) {
         objManager.addObject(object);
@@ -182,9 +249,7 @@ void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
 }
 
 void ObjectLoader::addUIElements(DrawableObjectManager& objManager) {
-    for (DrawableObject* object : objects) {
-        UserInterfaceElement* element = dynamic_cast<UserInterfaceElement*>(object);
-        std::cout << "numberOfVertices: " << element->getNumberOfVertices() << std::endl;
+    for (UserInterfaceElement* element : elements) {
         objManager.addElement(element);
     }
 }

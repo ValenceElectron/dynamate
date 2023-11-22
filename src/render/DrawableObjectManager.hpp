@@ -25,7 +25,7 @@ public:
     int getNumberOfObjects();
 
     void addElement(UserInterfaceElement *element);
-    uiChunk getNextUI();
+    uiChunk* getNextUI();
     int getNumberOfElements();
     void handleMouseClick();
 

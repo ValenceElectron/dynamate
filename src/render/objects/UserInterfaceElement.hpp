@@ -12,10 +12,10 @@ public:
 
     void getButtonBounds(double *array);
     bool isVisible();
-    void toggleVisibility();
+    void setVisibility(bool vis);
     void setButtonBounds(double *array);
     
-    virtual void isClicked(double x, double y) = 0;
+    void isClicked(double x, double y);
     void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices);
     
 private:

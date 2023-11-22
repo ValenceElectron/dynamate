@@ -3,7 +3,8 @@ objects:1
 
 numberOfVertices:18
 vertices:-0.5,-0.5,0.0,0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,0.5,0.0
-position:4.5,-4.5,5.0,
+uiBounds:0.0,0.0,0.0,0.0
+position:2.0,0.0,5.0,
 vertexShader:shaders/vertShader.glsl
 fragmentShader:shaders/fragShader.glsl
 endObject

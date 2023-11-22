@@ -19,6 +19,7 @@ public:
         std::string numberOfVertices;
         std::string vertices;
         std::string position;
+        std::string uiBounds;
         std::string filePath;
         std::string vertexShader;
         std::string fragmentShader;
@@ -35,6 +36,7 @@ private:
     std::list<std::string>::iterator fileContentIterator;
     std::vector<LoadedData> sceneData;
     std::vector<DrawableObject*> objects;
+    std::vector<UserInterfaceElement*> elements;
     int numberOfObjectsInScene;
     
     void prepareForLoadingUI();
@@ -43,6 +45,7 @@ private:
     void scanDirectory();
     void loadScene();
     void deserialize();
+    void deserializeUI();
     void addObjects(DrawableObjectManager& objManager);
     void addUIElements(DrawableObjectManager& objManager);
 };
