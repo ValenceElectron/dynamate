@@ -27,7 +27,7 @@ public:
     void addElement(UserInterfaceElement *element);
     uiChunk* getNextUI();
     int getNumberOfElements();
-    void handleMouseClick();
+    void handleMouseClick(double x, double y);
 
     void setupVertexBuffers();
 

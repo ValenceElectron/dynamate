@@ -45,8 +45,11 @@ int DrawableObjectManager::getNumberOfElements() {
     return uiBuffer.size();
 }
 
-void DrawableObjectManager::handleMouseClick() {
-     
+void DrawableObjectManager::handleMouseClick(double x, double y) {
+    for (uiChunk chunk : uiBuffer) {
+        std::string objectType = chunk.element->getObjectType();
+        if (objectType == "uibutton") { chunk.element->isClicked(x, y); }
+    }
 }
 
 void DrawableObjectManager::setupVertexBuffers() {

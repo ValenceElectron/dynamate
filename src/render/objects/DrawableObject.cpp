@@ -2,12 +2,14 @@
 
 DrawableObject::DrawableObject() { }
 
-DrawableObject::DrawableObject(std::string objType, float *pos, float *vertices, int numberOfVertices) {
+DrawableObject::DrawableObject(std::string objType, float *pos, float scale, float *vertices, int numberOfVertices) {
     objectType = objType;
 
     for (int i = 0; i < 3; i++) {
         position[i] = pos[i];
     }
+
+    objectScale = scale;
 
     vertexCoordinates = new float[numberOfVertices];
     numVertexCoordinates = numberOfVertices;
@@ -36,6 +38,8 @@ void DrawableObject::setShader(GLuint shader) {
     this->shader = shader;
 }
 
+void DrawableObject::setScale(float scale) { objectScale = scale; }
+
 void DrawableObject::getVertices(float *array) {
    for (int i = 0; i < numVertexCoordinates; i++) { array[i] = vertexCoordinates[i]; } 
 }
@@ -51,17 +55,27 @@ void DrawableObject::getPosition(float *pos) {
 }
 
 GLuint DrawableObject::getShader() { return shader; }
-
 std::string DrawableObject::getObjectType() { return objectType; }
+float DrawableObject::getScale() { return objectScale; }
 
 void DrawableObject::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
     GLuint shader = getShader();
     glUseProgram(shader);
 
+    // Translations happen by getting the current object position
     tMat = glm::translate(glm::mat4(1.0f), getPositionV3()); // Translation matrix
-    mMat = tMat;
-    /*rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotation Matrix
-    mMat = tMat * rMat; // Translation matrix * Rotation matrix = model matrix*/
+
+    // Use function to define where the rotation happens
+    //rMat = glm::rotate(glm::mat4(1.0f), getRotation(), glm::vec3(1.0f, 1.0f, 0.0f)); // Rotation Matrix
+
+    // last element of the vec3 is left as 0.0f because we're in 2D. If 3D, scale that too, since it's the scale along the z-axis.
+    sMat = glm::scale(glm::mat4(1.0f), glm::vec3(getScale(), getScale(), 0.0f)); // Scale matrix
+    
+    // Model matrix = Transform matrix * Rotation matrix * Scale matrix (order is specific)
+    mMat = tMat * sMat;
+
+
+    //rMat = glm::rotate(glm::mat4(1.0f), 0.7f * (float) currentTime, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotation Matrix
 
     mLoc = glGetUniformLocation(shader, "mMat");
     vLoc = glGetUniformLocation(shader, "vMat");
