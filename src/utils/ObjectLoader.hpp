@@ -13,7 +13,7 @@
 
 class ObjectLoader {
 public:
-    ObjectLoader(DrawableObjectManager& objManager);
+    ObjectLoader(DrawableObjectManager& objManager, float aspectRatio);
 
     struct LoadedData {
         std::string objectType;
@@ -40,6 +40,8 @@ private:
     std::vector<DrawableObject*> objects;
     std::vector<UserInterfaceElement*> elements;
     int numberOfObjectsInScene;
+
+    float aspectRatio;
     
     void prepareForLoadingUI();
     void chooseScene();

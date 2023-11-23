@@ -1,6 +1,8 @@
 #include "ObjectLoader.hpp"
 
-ObjectLoader::ObjectLoader(DrawableObjectManager& objManager) {
+ObjectLoader::ObjectLoader(DrawableObjectManager& objManager, float aspRatio) {
+    aspectRatio = aspRatio;
+
     // Do these calls once to load up the scene specified by the user, then another time
     // using chosenFilePath = "src/ui/" to load up the ui.
     listSceneDirectories();
@@ -172,6 +174,9 @@ void ObjectLoader::deserialize() {
 
         float objectScale = std::stof(data.scale);
 
+        // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
+        position[0] = (position[0] / 2.0f) * aspectRatio;
+
         DrawableObject* object = new DrawableObject(data.objectType, position, objectScale, vertices, numberOfVertices);
         object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         objects.push_back(object);
@@ -240,6 +245,11 @@ void ObjectLoader::deserializeUI() {
 
         float objectScale = std::stof(data.scale);
 
+        // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
+        position[0] = (position[0] / 2.0f) * aspectRatio;
+        // Also adjust the y-coordinate and map it to within the range afforded by the projectionMatrix
+        position[1] = (position[1] / 2.0f);
+        
         UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
         element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         elements.push_back(element);

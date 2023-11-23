@@ -17,7 +17,9 @@ private:
     Camera camera{0.0f, 0.0f, 10.0f};
     float cameraX, cameraY, cameraZ;
 
-    glm::mat4 pMat, vMat; 
+    glm::mat4 pMat, vMat;
+    float aspectRatio;
+    float pMatBounds = 5.0f;
 
     ObjectLoader* objLoader;
 
