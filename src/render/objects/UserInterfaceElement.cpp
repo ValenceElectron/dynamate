@@ -21,9 +21,8 @@ void UserInterfaceElement::isClicked(double x, double y) {
     std::cout << "Click!\n";
 }
 
-void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices) {
+void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat) {
     if (isVisible()) {
-        GLuint shader = getShader();
         glUseProgram(shader);
 
         // Translations happen by getting the current object position
@@ -33,7 +32,7 @@ void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pM
         //rMat = glm::rotate(glm::mat4(1.0f), getRotation(), glm::vec3(1.0f, 1.0f, 0.0f)); // Rotation Matrix
 
         // last element of the vec3 is left as 0.0f because we're in 2D. If 3D, scale that too, since it's the scale along the z-axis.
-        sMat = glm::scale(glm::mat4(1.0f), glm::vec3(getScale(), getScale(), 0.0f)); // Scale matrix
+        sMat = glm::scale(glm::mat4(1.0f), glm::vec3(objectScale(), objectScale(), 0.0f)); // Scale matrix
 
         // Model matrix = Transform matrix * Rotation matrix * Scale matrix (order is specific)
         mMat = tMat * sMat;
@@ -53,6 +52,6 @@ void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pM
         glFrontFace(GL_CCW);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        glDrawArrays(GL_TRIANGLES, 0, numberOfVertices/3);
+        glDrawArrays(GL_TRIANGLES, 0, numVertexCoordinates/3); // numVertexCoordinates/3 = the total number of vertices
     } else { }
 }

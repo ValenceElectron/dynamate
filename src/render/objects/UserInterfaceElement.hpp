@@ -16,7 +16,7 @@ public:
     void setButtonBounds(double *array);
     
     void isClicked(double x, double y);
-    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices);
+    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat);
     
 private:
     double buttonBounds[4];

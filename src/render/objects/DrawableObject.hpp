@@ -10,12 +10,12 @@
 #include <iostream>
 
 class DrawableObject {
-private:
+protected:
     float *vertexCoordinates;
     int numVertexCoordinates;
     float position[3];
     float objectScale;
-    GLuint shader;
+    GLuint shader, vbo;
     std::string objectType = "";
 
 public:
@@ -31,6 +31,7 @@ public:
     void setPosition(float *pos);
     void setShader(GLuint shader);
     void setScale(float scale);
+    void setVBO(GLuint vertexBuffer);
 
     void getVertices(float *array);
     int getNumberOfVertices();
@@ -40,7 +41,7 @@ public:
     std::string getObjectType();
     float getScale();
 
-    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices);
+    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat);
 };
 
 #endif
