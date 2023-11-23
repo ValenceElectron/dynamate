@@ -1,9 +1,10 @@
 #include "UserInterfaceLoader.hpp"
 
-UserInterfaceLoader::UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio)
+UserInterfaceLoader::UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio, int width, int height)
 : Loader(aspRatio) {
     filePath = "src/ui/";
     indexFile = "index.txt";
+    windowWidth = width; windowHeight = height;
 
     scanDirectory();
     loadData();
@@ -118,10 +119,21 @@ void UserInterfaceLoader::deserialize() {
 
         float objectScale = std::stof(data.scale);
 
+        double conversionFactorX = (position[0] / 10.0f);
+        double conversionFactorY = (position[1] / 10.0f);
+
         // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
         position[0] = (position[0] / 2.0f) * aspectRatio;
         // Also adjust the y-coordinate and map it to within the range afforded by the projectionMatrix
         position[1] = (position[1] / 2.0f);
+
+        uiBounds[0] = ((double) windowWidth * conversionFactorX) - 50;
+        uiBounds[1] = ((double) windowWidth * conversionFactorX) + 50;
+        uiBounds[2] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) - 50;
+        uiBounds[3] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) + 50;
+
+        std::cout << "x bounds: ( " << uiBounds[0] << ", " << uiBounds[1] << ")\n";
+        std::cout << "y bounds: ( " << uiBounds[2] << ", " << uiBounds[3] << ")\n";
         
         UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
         element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));

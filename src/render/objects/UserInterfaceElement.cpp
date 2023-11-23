@@ -18,7 +18,15 @@ void UserInterfaceElement::setButtonBounds(double *array) {
 }
 
 void UserInterfaceElement::isClicked(double x, double y) { 
-    std::cout << "Click!\n";
+    //std::cout << "Click!\n";
+    if (visible) {
+        bool xInBounds = (x >= buttonBounds[0]) && (x <= buttonBounds[1]);
+        bool yInBounds = (y >= buttonBounds[2]) && (y <= buttonBounds[3]);
+        
+        if (xInBounds && yInBounds) {
+            std::cout << "Click!\n";
+        }
+    }
 }
 
 void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat) {

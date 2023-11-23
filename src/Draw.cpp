@@ -3,7 +3,7 @@
 Draw::Draw(DrawableObjectManager& objManager, UserInterfaceManager& uiManager, int windowWidth, int windowHeight) {
     setupProjectionMatrix(windowWidth, windowHeight);
     objLoader = new ObjectLoader(objManager, aspectRatio);
-    uiLoader = new UserInterfaceLoader(uiManager, aspectRatio);
+    uiLoader = new UserInterfaceLoader(uiManager, aspectRatio, windowWidth, windowHeight);
 
     // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
     // it handles the vertex buffers for all DrawableObjects in objManager at once.

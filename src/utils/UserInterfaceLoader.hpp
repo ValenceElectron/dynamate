@@ -13,7 +13,7 @@
 
 class UserInterfaceLoader : public Loader {
 public:
-    UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio);
+    UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio, int width, int height);
     void loadData();
     void deserialize();
     void addToManager(UserInterfaceManager& uiManager);
@@ -33,6 +33,7 @@ private:
 
     std::vector<UserInterfaceElement*> elements;
     std::vector<LoadedData> loadedData;
+    int windowWidth, windowHeight;
 };
 
 #endif
