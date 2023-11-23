@@ -1,42 +1,23 @@
 #ifndef DRAWABLEOBJECTMANAGER_H
 #define DRAWABLEOBJECTMANAGER_H
 
+#include "ResourceManager.hpp"
 #include "objects/DrawableObject.hpp"
-#include "objects/UserInterfaceElement.hpp"
 
-#define numVAOs 1
-
-class DrawableObjectManager {
+class DrawableObjectManager : public ResourceManager {
 public:
-    struct drawableChunk {
-        DrawableObject* obj;
-        GLuint vertexBuffer;
-    };
-
-    struct uiChunk {
-        UserInterfaceElement* element;
-        GLuint vertexBuffer;
-    };
-
     DrawableObjectManager();
 
-    void addObject(DrawableObject *obj);
-    drawableChunk getNext();
-    int getNumberOfObjects();
-
-    void addElement(UserInterfaceElement *element);
-    uiChunk* getNextUI();
-    int getNumberOfElements();
-    void handleMouseClick(double x, double y);
+    void addToBuffer(DrawableObject *obj);
+    DrawableObject* getNext();
+    int getBufferSize();
 
     void setupVertexBuffers();
 
 private:
-    std::vector<drawableChunk> objectBuffer;
-    std::vector<uiChunk> uiBuffer;
-    int currentDrawableIndex;
-    int currentUIIndex;
-    GLuint vao[numVAOs];
+    std::vector<DrawableObject*> resourceBuffer;
+    int currentIndex;
+    GLuint vao[1];
 };
 
 #endif

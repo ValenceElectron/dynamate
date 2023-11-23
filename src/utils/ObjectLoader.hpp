@@ -16,10 +16,9 @@ class ObjectLoader : public Loader {
 public:
     ObjectLoader(DrawableObjectManager& objManager, float aspectRatio);
 
-    void scanDirectory();
     void loadData();
     void deserialize();
-    void addObjects(DrawableObjectManager& objManager);
+    void addToManager(DrawableObjectManager& objManager);
 
 private:
     struct LoadedData {

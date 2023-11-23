@@ -1,6 +1,6 @@
-#include "UILoader.hpp"
+#include "UserInterfaceLoader.hpp"
 
-UILoader::UILoader(float aspRatio)
+UserInterfaceLoader::UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio)
 : Loader(aspRatio) {
     filePath = "src/ui/";
     indexFile = "index.txt";
@@ -8,9 +8,10 @@ UILoader::UILoader(float aspRatio)
     scanDirectory();
     loadData();
     deserialize();
+    addToManager(uiManager);
 }
 
-void UILoader::loadData() {
+void UserInterfaceLoader::loadData() {
     std::cout << "Reading index.txt...\n\n\n";
     std::string keyValueDelimiter = ":";
 
@@ -58,7 +59,7 @@ void UILoader::loadData() {
     }
 }
 
-void UILoader::deserialize() {
+void UserInterfaceLoader::deserialize() {
     std::string arrayElementDelimiter = ",";
 
     std::cout << "\n\nBeginning UI deserialization...\n\n";
@@ -129,4 +130,10 @@ void UILoader::deserialize() {
     }
 
     std::cout << "\nUI deserialization finished!\n\n\n";
+}
+
+void UserInterfaceLoader::addToManager(UserInterfaceManager& uiManager) {
+    for (UserInterfaceElement* element : elements) {
+        uiManager.addToBuffer(element);
+    }
 }

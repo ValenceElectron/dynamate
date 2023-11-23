@@ -1,12 +1,13 @@
 #include "Draw.hpp"
 
-Draw::Draw(DrawableObjectManager& objManager, int windowWidth, int windowHeight) {
+Draw::Draw(DrawableObjectManager& objManager, UserInterfaceManager& uiManager, int windowWidth, int windowHeight) {
     setupProjectionMatrix(windowWidth, windowHeight);
     objLoader = new ObjectLoader(objManager, aspectRatio);
+    uiLoader = new UserInterfaceLoader(uiManager, aspectRatio);
 
     // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
     // it handles the vertex buffers for all DrawableObjects in objManager at once.
-    objManager.setupVertexBuffers();
+    OGLSetup::setupVertexBuffers(objManager, uiManager);
 }
 
 void Draw::setupProjectionMatrix(int windowWidth, int windowHeight) {
@@ -15,7 +16,7 @@ void Draw::setupProjectionMatrix(int windowWidth, int windowHeight) {
     pMat = glm::ortho(0.0f, pMatBounds * aspectRatio, 0.0f, pMatBounds, 0.0f, 100.0f);
 }
 
-void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager) {
+void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager, UserInterfaceManager& uiManager) {
     glClear(GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -25,20 +26,17 @@ void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager) {
     vMat = glm::inverse(glm::mat4(camera.GetU(), camera.GetV(), camera.GetN(), glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)))
             * glm::translate(glm::mat4(1.0f), glm::vec3(-camera.GetC().x, -camera.GetC().y, -camera.GetC().z));
 
-    drawObjects(currentTime, objManager);
+    drawObjects(currentTime, objManager, uiManager);
 }
 
-void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager) {
-    int numberOfObjects = objManager.getNumberOfObjects();
+void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager, UserInterfaceManager& uiManager) {
+    int numberOfObjects = objManager.getBufferSize();
     for (int i = 0; i < numberOfObjects; i++) {
-        DrawableObjectManager::drawableChunk chunk = objManager.getNext();
-        //std::cout << "Drawing vertex buffer: " << chunk.vertexBuffer << std::endl;
-        chunk.obj->draw(currentTime, vMat, pMat, chunk.vertexBuffer, chunk.obj->getNumberOfVertices());
+        objManager.getNext()->draw(currentTime, vMat, pMat);
     }
 
-    int numberOfElements = objManager.getNumberOfElements();
+    int numberOfElements = uiManager.getBufferSize();
     for (int i = 0; i < numberOfElements; i++) {
-        DrawableObjectManager::uiChunk* chunk = objManager.getNextUI();
-        chunk->element->draw(currentTime, vMat, pMat, chunk->vertexBuffer, chunk->element->getNumberOfVertices());
+        uiManager.getNext()->draw(currentTime, vMat, pMat);
     }
 }

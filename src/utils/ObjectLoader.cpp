@@ -8,29 +8,7 @@ ObjectLoader::ObjectLoader(DrawableObjectManager& objManager, float aspRatio)
     scanDirectory();
     loadData();
     deserialize();
-    addObjects(objManager);
-}
-
-void ObjectLoader::scanDirectory() {
-    std::string line = "";
-
-    std::ifstream fileStream(filePath + indexFile, std::ios::in);
-
-    if (!fileStream.eof()) { 
-        getline(fileStream, line);
-    } else {
-        std::cout << "Scene is missing!\n";
-        return;
-    }
-
-    if (line == "#dynamo") {
-        while (!fileStream.eof()) {
-            getline(fileStream, line);
-            //std::cout << line << std::endl;
-            fileContents.push_back(line);
-        }
-        std::cout << "DYNAMO!\n";
-    }
+    addToManager(objManager);
 }
 
 void ObjectLoader::loadData() {
@@ -141,9 +119,9 @@ void ObjectLoader::deserialize() {
     std::cout << "\nDeserialization finished!\n\n\n";
 }
 
-void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
+void ObjectLoader::addToManager(DrawableObjectManager& objManager) {
     for (DrawableObject* object : objects) {
-        objManager.addObject(object);
+        objManager.addToBuffer(object);
     }
 }
 

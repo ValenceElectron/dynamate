@@ -1,15 +1,22 @@
-#ifndef UILOADER_H
-#define UILOADER_H
+#ifndef USERINTERFACELOADER_H
+#define USERINTERFACELOADER_H
 
+#include <string>
+#include <list>
+#include <vector>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 #include "Loader.hpp"
-#include "../render/DrawableObjectManager.hpp"
+#include "../render/UserInterfaceManager.hpp"
+#include "OGLSetup.hpp"
 
-class UILoader : public Loader {
+class UserInterfaceLoader : public Loader {
 public:
-    UILoader(float aspRatio);
+    UserInterfaceLoader(UserInterfaceManager& uiManager, float aspRatio);
     void loadData();
     void deserialize();
-    void addToManager();
+    void addToManager(UserInterfaceManager& uiManager);
 
 private:
     struct LoadedData {
