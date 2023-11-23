@@ -14,7 +14,9 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     double x, y;
     glfwGetCursorPos(window, &x, &y);
 
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        std::cout << "x: " << x << ", y: " << y << std::endl;
+        objManager.handleMouseClick(x, y);
 
     }
 }
@@ -31,16 +33,15 @@ void initGLFW() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
-    // width = 75% of the screen
-    windowWidth = static_cast<int>(videoMode->width / 1.5);
-    // aspect ratio 16 by 9
-    windowHeight = static_cast<int>(videoMode->height / 16 * 9);
+    windowWidth = static_cast<int>(videoMode->width);
+    // if width was smaller than monitor width, use videoMode->height / 16 * 9 for height, for an aspect ratio 16 by 9
+    windowHeight = static_cast<int>(videoMode->height);
 
     glfwGetMonitorPos(monitors[0], &monitorX, &monitorY);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    window = glfwCreateWindow(600, 600, "Dynamate", NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Dynamate", NULL, NULL);
     glfwMakeContextCurrent(window);
-    glfwSetWindowPos(window, monitorX + (videoMode->width - windowWidth) / 2, monitorY + (videoMode->height - windowHeight) / 2);
+    //glfwSetWindowPos(window, monitorX + (videoMode->width - windowWidth) / 2, monitorY + (videoMode->height - windowHeight) / 2);
     glfwShowWindow(window);
 
     if(glewInit() != GLEW_OK) {exit(EXIT_FAILURE);}
@@ -55,7 +56,7 @@ void initGLFW() {
 int main(void) {
     initGLFW();
     std::cout << "Initializing rendering pipeline...\n";
-    Draw draw = Draw(objManager);
+    Draw draw = Draw(objManager, windowWidth, windowHeight);
 
     std::cout << "Beginning main program loop...\n";
     while(!glfwWindowShouldClose(window)) {
