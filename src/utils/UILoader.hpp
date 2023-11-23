@@ -1,39 +1,31 @@
-#ifndef OBJECTLOADER_H
-#define OBJECTLOADER_H
+#ifndef UILOADER_H
+#define UILOADER_H
 
-#include <string>
-#include <list>
-#include <vector>
-#include <filesystem>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include "Loader.hpp"
 #include "../render/DrawableObjectManager.hpp"
-#include "OGLSetup.hpp"
 
-class ObjectLoader : public Loader {
+class UILoader : public Loader {
 public:
-    ObjectLoader(DrawableObjectManager& objManager, float aspectRatio);
-
-    void scanDirectory();
+    UILoader(float aspRatio);
     void loadData();
     void deserialize();
-    void addObjects(DrawableObjectManager& objManager);
+    void addToManager();
 
 private:
     struct LoadedData {
+        std::string objectType;
         std::string numberOfVertices;
         std::string vertices;
         std::string position;
+        std::string uiBounds;
         std::string scale;
         std::string filePath;
         std::string vertexShader;
         std::string fragmentShader;
     };
 
+    std::vector<UserInterfaceElement*> elements;
     std::vector<LoadedData> loadedData;
-    std::vector<DrawableObject*> objects;
 };
 
 #endif

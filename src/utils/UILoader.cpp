@@ -1,42 +1,19 @@
-#include "ObjectLoader.hpp"
+#include "UILoader.hpp"
 
-ObjectLoader::ObjectLoader(DrawableObjectManager& objManager, float aspRatio)
+UILoader::UILoader(float aspRatio)
 : Loader(aspRatio) {
-    filePath = "scenes/default/";
+    filePath = "src/ui/";
     indexFile = "index.txt";
 
     scanDirectory();
     loadData();
     deserialize();
-    addObjects(objManager);
 }
 
-void ObjectLoader::scanDirectory() {
-    std::string line = "";
-
-    std::ifstream fileStream(filePath + indexFile, std::ios::in);
-
-    if (!fileStream.eof()) { 
-        getline(fileStream, line);
-    } else {
-        std::cout << "Scene is missing!\n";
-        return;
-    }
-
-    if (line == "#dynamo") {
-        while (!fileStream.eof()) {
-            getline(fileStream, line);
-            //std::cout << line << std::endl;
-            fileContents.push_back(line);
-        }
-        std::cout << "DYNAMO!\n";
-    }
-}
-
-void ObjectLoader::loadData() {
+void UILoader::loadData() {
     std::cout << "Reading index.txt...\n\n\n";
     std::string keyValueDelimiter = ":";
-    
+
     fileContentIterator = fileContents.begin();
 
     std::string numberOfObjects = *fileContentIterator;
@@ -44,7 +21,7 @@ void ObjectLoader::loadData() {
     numberOfObjects = numberOfObjects.substr(delimPos + 1, numberOfObjects.size());
     numberOfObjectsInScene = std::stoi(numberOfObjects);
 
-    std::cout << "Number of objects to load: " << numberOfObjectsInScene << "\n\n";
+    std::cout << "Number of UI elements to load: " << numberOfObjectsInScene << "\n\n";
 
     fileContentIterator++;
 
@@ -60,9 +37,11 @@ void ObjectLoader::loadData() {
             std::string value = string.substr(delimPosition + 1, string.size() - 1);
             std::cout << key << " " << value << std::endl;
 
-            if (key == "numberOfVertices") { data.numberOfVertices = value; }
+            if (key == "objectType") { data.objectType = value; }
+            else if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
+            else if (key == "uiBounds") { data.uiBounds = value; }
             else if (key == "scale") { data.scale = value; }
             else if (key == "vertexShader") { data.vertexShader = value; }
             else if (key == "fragmentShader") { data.fragmentShader = value; }
@@ -79,15 +58,16 @@ void ObjectLoader::loadData() {
     }
 }
 
-void ObjectLoader::deserialize() {
+void UILoader::deserialize() {
     std::string arrayElementDelimiter = ",";
 
-    std::cout << "\n\nBeginning deserialization...\n\n";
+    std::cout << "\n\nBeginning UI deserialization...\n\n";
 
     for (int i = 0; i < loadedData.size(); i++) {
         int numberOfVertices = 0;
         float *vertices;
         float position[3] = { 0 };
+        double uiBounds[4] = { 0 };
         LoadedData data = loadedData.at(i);
         std::string vertexShader = data.filePath + data.vertexShader;
         std::string fragmentShader = data.filePath + data.fragmentShader;
@@ -111,6 +91,16 @@ void ObjectLoader::deserialize() {
                 i++;
             }
 
+            std::stringstream uiBoundsStream(data.uiBounds);
+            i = 0;
+            while(uiBoundsStream.good() && i < 4) {
+                std::string substring = "";
+                getline(uiBoundsStream, substring, ',');
+                uiBounds[i] = std::stod(substring);
+                std::cout << "UI boundary: " << uiBounds[i] << std::endl;
+                i++;
+            }
+
             std::stringstream positionStream(data.position);
             i = 0;
             while (positionStream.good() && i < 3) {
@@ -129,21 +119,14 @@ void ObjectLoader::deserialize() {
 
         // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
         position[0] = (position[0] / 2.0f) * aspectRatio;
-        // Adjust the y-coordinate to also map within the range afforded by the projectionMatrix
+        // Also adjust the y-coordinate and map it to within the range afforded by the projectionMatrix
         position[1] = (position[1] / 2.0f);
-
-        DrawableObject* object = new DrawableObject("drawable", position, objectScale, vertices, numberOfVertices);
-        object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
-        objects.push_back(object);
+        
+        UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
+        element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
+        elements.push_back(element);
         //std::cout << "\nObject loaded!\n";
     }
 
-    std::cout << "\nDeserialization finished!\n\n\n";
+    std::cout << "\nUI deserialization finished!\n\n\n";
 }
-
-void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
-    for (DrawableObject* object : objects) {
-        objManager.addObject(object);
-    }
-}
-
