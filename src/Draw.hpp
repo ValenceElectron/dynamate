@@ -19,13 +19,13 @@ private:
 
     glm::mat4 pMat, vMat; 
 
-    //DrawableObjectManager objManager;
     ObjectLoader* objLoader;
 
+    void setupProjectionMatrix(int windowWidth, int windowHeight);
     void drawObjects(double currentTime, DrawableObjectManager& objManager);
 
 public:
-    Draw(DrawableObjectManager& objManager);
+    Draw(DrawableObjectManager& objManager, int windowWidth, int windowHeight);
     void startDrawing(double currentTime, DrawableObjectManager& objManager);
 };
 

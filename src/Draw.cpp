@@ -1,14 +1,19 @@
 #include "Draw.hpp"
 
-Draw::Draw(DrawableObjectManager& objManager) {
+Draw::Draw(DrawableObjectManager& objManager, int windowWidth, int windowHeight) {
     objLoader = new ObjectLoader(objManager);
-    pMat = glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
-
+    //pMat = glm::ortho(0.0f, windowWidth, 0.0f, windowHeight, 0.0f, 100.0f); // Orthographic perspective to achieve 2D
+    setupProjectionMatrix(windowWidth, windowHeight);
     // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
     // it handles the vertex buffers for all DrawableObjects in objManager at once.
     objManager.setupVertexBuffers();
 }
 
+void Draw::setupProjectionMatrix(int windowWidth, int windowHeight) {
+    float aspectRatio = (float) windowWidth / (float) windowHeight;
+    //pMat = glm::ortho(0.0f, (float) windowWidth, 0.0f, (float) windowHeight, 0.0f, 100.0f);
+    pMat = glm::ortho(0.0f, 5.0f * aspectRatio, 0.0f, 5.0f, 0.0f, 100.0f);
+}
 
 void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager) {
     glClear(GL_DEPTH_BUFFER_BIT);
