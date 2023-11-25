@@ -26,6 +26,7 @@ private:
         std::string position;
         std::string uiBounds;
         std::string scale;
+        std::string boundsScale;
         std::string filePath;
         std::string vertexShader;
         std::string fragmentShader;

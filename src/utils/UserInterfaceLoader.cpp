@@ -43,8 +43,8 @@ void UserInterfaceLoader::loadData() {
             else if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
-            else if (key == "uiBounds") { data.uiBounds = value; }
             else if (key == "scale") { data.scale = value; }
+            else if (key == "boundsScale") { data.boundsScale = value; }
             else if (key == "vertexShader") { data.vertexShader = value; }
             else if (key == "fragmentShader") { data.fragmentShader = value; }
             else if (key == "\n") { }
@@ -70,6 +70,7 @@ void UserInterfaceLoader::deserialize() {
         float *vertices;
         float position[3] = { 0 };
         double uiBounds[4] = { 0 };
+        double uiBoundsScale[2] = { 0 };
         LoadedData data = loadedData.at(i);
         std::string vertexShader = data.filePath + data.vertexShader;
         std::string fragmentShader = data.filePath + data.fragmentShader;
@@ -93,16 +94,6 @@ void UserInterfaceLoader::deserialize() {
                 i++;
             }
 
-            std::stringstream uiBoundsStream(data.uiBounds);
-            i = 0;
-            while(uiBoundsStream.good() && i < 4) {
-                std::string substring = "";
-                getline(uiBoundsStream, substring, ',');
-                uiBounds[i] = std::stod(substring);
-                std::cout << "UI boundary: " << uiBounds[i] << std::endl;
-                i++;
-            }
-
             std::stringstream positionStream(data.position);
             i = 0;
             while (positionStream.good() && i < 3) {
@@ -110,6 +101,16 @@ void UserInterfaceLoader::deserialize() {
                 getline(positionStream, substring, ',');
                 position[i] = std::stof(substring);
                 std::cout << "position: " << position[i] << std::endl;
+                i++;
+            }
+
+            std::stringstream boundsScaleStream(data.boundsScale);
+            i = 0;
+            while (boundsScaleStream.good() && i < 2) {
+                std::string substring = "";
+                getline(boundsScaleStream, substring, ',');
+                uiBoundsScale[i] = std::stod(substring);
+                std::cout << "UI Bounds Scale: " << uiBoundsScale[i] << std::endl;
                 i++;
             }
 
@@ -122,15 +123,23 @@ void UserInterfaceLoader::deserialize() {
         double conversionFactorX = (position[0] / 10.0f);
         double conversionFactorY = (position[1] / 10.0f);
 
+        // Half-width of square if using vertices between -0.5 and 0.5.
+        double uiScaleX = objectScale * uiBoundsScale[0];
+        double uiScaleY = objectScale * uiBoundsScale[1];
+        double boundsModifierX = ((windowWidth / (5 * aspectRatio)) * uiScaleX) / 2;
+        double boundsModifierY = ((windowWidth / (5 * aspectRatio)) * uiScaleY) / 2;
+
+        std::cout << "Bounds Modifier: (" << boundsModifierX << ", " << boundsModifierY << ")" << std::endl;
+
         // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
         position[0] = (position[0] / 2.0f) * aspectRatio;
         // Also adjust the y-coordinate and map it to within the range afforded by the projectionMatrix
         position[1] = (position[1] / 2.0f);
 
-        uiBounds[0] = ((double) windowWidth * conversionFactorX) - 50;
-        uiBounds[1] = ((double) windowWidth * conversionFactorX) + 50;
-        uiBounds[2] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) - 50;
-        uiBounds[3] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) + 50;
+        uiBounds[0] = ((double) windowWidth * conversionFactorX) - boundsModifierX;
+        uiBounds[1] = ((double) windowWidth * conversionFactorX) + boundsModifierX;
+        uiBounds[2] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) - boundsModifierY;
+        uiBounds[3] = ((double) windowHeight - ((double) windowHeight * conversionFactorY)) + boundsModifierY;
 
         std::cout << "x bounds: ( " << uiBounds[0] << ", " << uiBounds[1] << ")\n";
         std::cout << "y bounds: ( " << uiBounds[2] << ", " << uiBounds[3] << ")\n";
