@@ -17,9 +17,8 @@ void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     glfwGetCursorPos(window, &x, &y);
 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        std::cout << "x: " << x << ", y: " << y << std::endl;
+        //std::cout << "x: " << x << ", y: " << y << std::endl;
         uiManager.handleMouseClick(x, y);
-
     }
 }
 

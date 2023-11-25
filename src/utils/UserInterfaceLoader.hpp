@@ -21,6 +21,7 @@ public:
 private:
     struct LoadedData {
         std::string objectType;
+        std::string buttonType;
         std::string numberOfVertices;
         std::string vertices;
         std::string position;

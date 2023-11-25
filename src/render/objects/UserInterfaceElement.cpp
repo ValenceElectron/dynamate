@@ -63,3 +63,19 @@ void UserInterfaceElement::draw(double currentTime, glm::mat4 vMat, glm::mat4 pM
         glDrawArrays(GL_TRIANGLES, 0, numVertexCoordinates/3); // numVertexCoordinates/3 = the total number of vertices
     } else { }
 }
+
+MainMenuButton::MainMenuButton(std::string objType, float *pos, float scale, float *vertices, int numberOfVertices, double *buttonBounds)
+: UserInterfaceElement(objType, pos, scale, vertices, numberOfVertices, buttonBounds) {
+    
+}
+
+void MainMenuButton::isClicked(double x, double y) {
+    if (visible) {
+        bool xInBounds = (x >= buttonBounds[0]) && (x <= buttonBounds[1]);
+        bool yInBounds = (y >= buttonBounds[2]) && (y <= buttonBounds[3]);
+        
+        if (xInBounds && yInBounds) {
+            std::cout << "Main Menu\n";
+        }
+    }
+}

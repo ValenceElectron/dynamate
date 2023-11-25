@@ -40,6 +40,7 @@ void UserInterfaceLoader::loadData() {
             std::cout << key << " " << value << std::endl;
 
             if (key == "objectType") { data.objectType = value; }
+            else if (key == "buttonType") { data.buttonType = value; }
             else if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
@@ -144,7 +145,13 @@ void UserInterfaceLoader::deserialize() {
         std::cout << "x bounds: ( " << uiBounds[0] << ", " << uiBounds[1] << ")\n";
         std::cout << "y bounds: ( " << uiBounds[2] << ", " << uiBounds[3] << ")\n";
         
-        UserInterfaceElement* element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
+        UserInterfaceElement* element;
+        if (data.buttonType == "main_menu") {
+            std::cout << "Main menu button\n";
+            element = new MainMenuButton(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
+        } else {
+            element = new UserInterfaceElement(data.objectType, position, objectScale, vertices, numberOfVertices, uiBounds);
+        }
         element->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         elements.push_back(element);
         //std::cout << "\nObject loaded!\n";
