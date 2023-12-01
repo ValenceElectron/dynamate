@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 #include "UserInterfaceElement.hpp"
 
 UserInterfaceElement::UserInterfaceElement(std::string objType, float *pos, float scale, float *vertices, int numberOfVertices, double *buttonBounds)
