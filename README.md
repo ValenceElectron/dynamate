@@ -2,8 +2,28 @@
 
 Dynamate is a graphics engine for building small, 2D graphics applications that run in transparent windows!
 
-Dynamate reads from the "dynamate/scenes" directory and draws the scenes as specified. It reads objects, textures, and shaders from scenes
-stored in the "scenes" dynamate/directory, sends them into the OpenGL rendering pipeline, and they then get drawn to your screen.
+Dynamate reads from the "dynamate/scenes" directory and draws the scenes as specified. The intent is to use Dynamate to "decorate" your
+desktop and make it come alive a bit more than with just a live wallpaper.
+
+# To Note
+
+Dynamate is a work in progress. A solid foundation has been laid, but it's still very much in an early alpha phase.
+Currently, Dynamate only loads the default scene (scenes/default/), and it cannot yet handle textures and animations. If you want
+to create your own scene, create a backup of /default/ first with a different name, then proceed to edit the default index.txt.
+
+# Dependencies
+
+- glfw3
+- glm
+- glew
+- freeglut
+- Support for OpenGL 4.6
+
+# Build From Source
+
+  - cd into the project "dynamate" directory
+  - run 'make'
+  - run Dynamate with "./main"
 
 # How To Create a Scene
 
@@ -23,6 +43,9 @@ stored in the "scenes" dynamate/directory, sends them into the OpenGL rendering 
       - a comma separated array of floats, no spaces between.
       - these are xyz-coordinates.
       - the orthogonal perspective disregards the Z-value. X and Y are limited to between -5.0 and 5.0.
+    - scale:1.0
+      - takes a float.
+      - this scales the object up if greater than 1.0, and scales it down if less than 1.0.
     - vertexShader:shaders/vertShader.glsl
       - this is the filepath to a GLSL shader. the parent directory is your scene folder within "dynamate/scenes"
     - fragmentShader:shaders/fragShader.glsl
