@@ -21,7 +21,7 @@ to create your own scene, create a backup of /default/ first with a different na
 
 # Build From Source
 
-  - cd into the project "dynamate" directory
+  - cd into the "dynamate" directory
   - run 'make'
   - run Dynamate with "./main"
 
