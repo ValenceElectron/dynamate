@@ -1,68 +1,17 @@
 #include "ObjectLoader.hpp"
 
-ObjectLoader::ObjectLoader(DrawableObjectManager& objManager) {
-    listSceneDirectories();
-    chooseScene();
+ObjectLoader::ObjectLoader(DrawableObjectManager& objManager, float aspRatio)
+: Loader(aspRatio) {
+    filePath = "scenes/default/";
+    indexFile = "index.txt";
+
     scanDirectory();
-    loadScene();
+    loadData();
     deserialize();
-    addObjects(objManager);
+    addToManager(objManager);
 }
 
-
-
-
-void ObjectLoader::chooseScene() {
-    int directoryIndex;
-    std::cout << "\n\n\nWhich scene would you like to load?\n\n";
-
-    for (int i = 1; i <= sceneDirectories.size(); i++) {
-        std::cout << i << ". " << sceneDirectories.at(i - 1) << std::endl;
-    }
-
-    std::cout << "\033[9999;1H";
-    std::cout << "Enter 1-" << sceneDirectories.size() << ": ";
-    std::cin >> directoryIndex;
-
-    if (!(directoryIndex > 0) && !(directoryIndex <= sceneDirectories.size())) {
-        std::cout << "ERROR: \"" << directoryIndex << "\" is not a valid option\n";
-        std::cout << "Resorting to default scene...\n";
-        directoryIndex -1;
-    }
-
-    if (directoryIndex == -1) { chosenFilePath = defaultSceneFilePath; }
-    else { chosenFilePath = sceneDirectories.at(directoryIndex - 1) + "/"; }
-}
-
-void ObjectLoader::listSceneDirectories() {
-    for (auto& element : std::filesystem::directory_iterator(sceneDirectory)) {
-        if (element.is_directory()) { sceneDirectories.push_back(element.path().string()); }
-    }
-}
-
-void ObjectLoader::scanDirectory() {
-    std::string line = "";
-
-    std::ifstream fileStream(chosenFilePath + indexFile, std::ios::in);
-
-    if (!fileStream.eof()) { 
-        getline(fileStream, line);
-    } else {
-        std::cout << "Scene is missing!\n";
-        return;
-    }
-
-    if (line == "#dynamo") {
-        while (!fileStream.eof()) {
-            getline(fileStream, line);
-            //std::cout << line << std::endl;
-            fileContents.push_back(line);
-        }
-        std::cout << "DYNAMO!\n";
-    }
-}
-
-void ObjectLoader::loadScene() {
+void ObjectLoader::loadData() {
     std::cout << "Reading index.txt...\n\n\n";
     std::string keyValueDelimiter = ":";
     
@@ -92,6 +41,7 @@ void ObjectLoader::loadScene() {
             if (key == "numberOfVertices") { data.numberOfVertices = value; }
             else if (key == "vertices") { data.vertices = value; }
             else if (key == "position") { data.position = value; }
+            else if (key == "scale") { data.scale = value; }
             else if (key == "vertexShader") { data.vertexShader = value; }
             else if (key == "fragmentShader") { data.fragmentShader = value; }
             else if (key == "\n") { }
@@ -101,8 +51,8 @@ void ObjectLoader::loadScene() {
             fileContentIterator++;
         }
 
-        data.filePath = chosenFilePath;
-        sceneData.push_back(data);
+        data.filePath = filePath;
+        loadedData.push_back(data);
         std::cout << "Object data loaded!\n";
     }
 }
@@ -112,11 +62,11 @@ void ObjectLoader::deserialize() {
 
     std::cout << "\n\nBeginning deserialization...\n\n";
 
-    for (int i = 0; i < sceneData.size(); i++) {
+    for (int i = 0; i < loadedData.size(); i++) {
         int numberOfVertices = 0;
         float *vertices;
         float position[3] = { 0 };
-        LoadedData data = sceneData.at(i);
+        LoadedData data = loadedData.at(i);
         std::string vertexShader = data.filePath + data.vertexShader;
         std::string fragmentShader = data.filePath + data.fragmentShader;
         
@@ -153,7 +103,14 @@ void ObjectLoader::deserialize() {
             std::cout << "ERROR: " << e.what() << std::endl;
         }
 
-        DrawableObject* object = new DrawableObject(position, vertices, numberOfVertices);
+        float objectScale = std::stof(data.scale);
+
+        // Adjust the dynamo x-coordinate and map it to within the range afforded by the projectionMatrix
+        position[0] = (position[0] / 2.0f) * aspectRatio;
+        // Adjust the y-coordinate to also map within the range afforded by the projectionMatrix
+        position[1] = (position[1] / 2.0f);
+
+        DrawableObject* object = new DrawableObject("drawable", position, objectScale, vertices, numberOfVertices);
         object->setShader(OGLSetup::createShaderProgram(vertexShader, fragmentShader));
         objects.push_back(object);
         //std::cout << "\nObject loaded!\n";
@@ -162,8 +119,9 @@ void ObjectLoader::deserialize() {
     std::cout << "\nDeserialization finished!\n\n\n";
 }
 
-void ObjectLoader::addObjects(DrawableObjectManager& objManager) {
+void ObjectLoader::addToManager(DrawableObjectManager& objManager) {
     for (DrawableObject* object : objects) {
-        objManager.addObject(object);
+        objManager.addToBuffer(object);
     }
 }
+

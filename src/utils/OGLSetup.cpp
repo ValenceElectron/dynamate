@@ -12,6 +12,42 @@ using namespace std;
 
 OGLSetup::OGLSetup() {}
 
+void OGLSetup::setupVertexBuffers(DrawableObjectManager& objManager, UserInterfaceManager& uiManager) {
+    glGenVertexArrays(1, vao);
+    glBindVertexArray(vao[0]);
+
+    std::cout << "Generating vertex buffers...\n";
+    int objBufferSize = objManager.getBufferSize();
+    int uiBufferSize = uiManager.getBufferSize();
+
+    int numberOfObjects = objBufferSize + uiBufferSize;
+    std::cout << "Number of buffers to generate: " << numberOfObjects << std::endl;
+    GLuint vbosToGenerate[numberOfObjects];
+    glGenBuffers(numberOfObjects, vbosToGenerate);
+
+    for (int i = 0; i < numberOfObjects; i++) {
+        if (i < objBufferSize) {
+            DrawableObject* pObj = objManager.getNext();
+            float verts[pObj->getNumberOfVertices()] = { 0 };
+            pObj->getVertices(verts);
+            glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+            std::cout << "Vertex buffer: " << vbosToGenerate[i] << std::endl;
+            pObj->setVBO(vbosToGenerate[i]);
+        } else {
+            UserInterfaceElement* pElm = uiManager.getNext();
+            float verts[pElm->getNumberOfVertices()] = { 0 };
+            pElm->getVertices(verts);
+            glBindBuffer(GL_ARRAY_BUFFER, vbosToGenerate[i]);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+            std::cout << "Vertex buffer: " << vbosToGenerate[i] << std::endl;
+            pElm->setVBO(vbosToGenerate[i]);
+        }
+    }
+}
+
 string OGLSetup::readShaderFile(string filePath) {
 	string content;
 	ifstream fileStream(filePath, ios::in);
@@ -104,45 +140,3 @@ GLuint OGLSetup::createShaderProgram(string vp, string fp) {
 	return vfprogram;
 }
 
-GLuint OGLSetup::createShaderProgram(string vp, string gp, string fp) {
-	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
-	GLuint gShader = prepareShader(GL_GEOMETRY_SHADER, gp);
-	GLuint fShader = prepareShader(GL_FRAGMENT_SHADER, fp);
-	GLuint vgfprogram = glCreateProgram();
-	glAttachShader(vgfprogram, vShader);
-	glAttachShader(vgfprogram, gShader);
-	glAttachShader(vgfprogram, fShader);
-	finalizeShaderProgram(vgfprogram);
-	return vgfprogram;
-}
-
-GLuint OGLSetup::createShaderProgram(string vp, string tCS, string tES, string fp) {
-	//printf("tess\n");
-	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
-	GLuint tcShader = prepareShader(GL_TESS_CONTROL_SHADER, tCS);
-	GLuint teShader = prepareShader(GL_TESS_EVALUATION_SHADER, tES);
-	GLuint fShader = prepareShader(GL_FRAGMENT_SHADER, fp);
-	GLuint vtfprogram = glCreateProgram();
-	glAttachShader(vtfprogram, vShader);
-	glAttachShader(vtfprogram, tcShader);
-	glAttachShader(vtfprogram, teShader);
-	glAttachShader(vtfprogram, fShader);
-	finalizeShaderProgram(vtfprogram);
-	return vtfprogram;
-}
-
-GLuint OGLSetup::createShaderProgram(string vp, string tCS, string tES, string gp, string fp) {
-	GLuint vShader = prepareShader(GL_VERTEX_SHADER, vp);
-	GLuint tcShader = prepareShader(GL_TESS_CONTROL_SHADER, tCS);
-	GLuint teShader = prepareShader(GL_TESS_EVALUATION_SHADER, tES);
-	GLuint gShader = prepareShader(GL_GEOMETRY_SHADER, gp);
-	GLuint fShader = prepareShader(GL_FRAGMENT_SHADER, fp);
-	GLuint vtgfprogram = glCreateProgram();
-	glAttachShader(vtgfprogram, vShader);
-	glAttachShader(vtgfprogram, tcShader);
-	glAttachShader(vtgfprogram, teShader);
-	glAttachShader(vtgfprogram, gShader);
-	glAttachShader(vtgfprogram, fShader);
-	finalizeShaderProgram(vtgfprogram);
-	return vtgfprogram;
-}

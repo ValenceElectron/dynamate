@@ -1,0 +1,13 @@
+#dynamo
+objects:1
+
+objectType:uibutton
+buttonType:main_menu
+numberOfVertices:18
+vertices:-0.5,-0.5.0,0.0,0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,-0.5,0.0,0.5,0.5,0.0,-0.5,0.5,0.0
+position:9.0,1.5,5.0
+boundsScale:1.0,1.0
+scale:1.0
+vertexShader:shaders/vertShader.glsl
+fragmentShader:shaders/fragShader.glsl
+endObject

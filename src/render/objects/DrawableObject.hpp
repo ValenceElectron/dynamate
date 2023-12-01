@@ -10,32 +10,38 @@
 #include <iostream>
 
 class DrawableObject {
-private:
+protected:
     float *vertexCoordinates;
     int numVertexCoordinates;
     float position[3];
-    GLuint shader;
+    float objectScale;
+    GLuint shader, vbo;
+    std::string objectType = "";
 
 public:
-    glm::mat4 mMat, tMat, rMat;
+    glm::mat4 mMat, tMat, rMat, sMat;
     GLuint mLoc, vLoc, pLoc;
 
     DrawableObject();
-    DrawableObject(float *pos, float *vertices, int numberOfVertices);
+    DrawableObject(std::string objType, float *pos, float scale, float *vertices, int numberOfVertices);
     virtual ~DrawableObject() = default;
 
     void setVertices(float *array);
     void setNumberOfVertices(int num);
     void setPosition(float *pos);
     void setShader(GLuint shader);
+    void setScale(float scale);
+    void setVBO(GLuint vertexBuffer);
 
     void getVertices(float *array);
     int getNumberOfVertices();
     void getPosition(float *pos);
     glm::vec3 getPositionV3();
     GLuint getShader();
+    std::string getObjectType();
+    float getScale();
 
-    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat, GLuint vbo, int numberOfVertices);
+    void draw(double currentTime, glm::mat4 vMat, glm::mat4 pMat);
 };
 
 #endif

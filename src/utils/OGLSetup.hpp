@@ -11,6 +11,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "../render/DrawableObjectManager.hpp"
+#include "../render/UserInterfaceManager.hpp"
 
 class OGLSetup {
 private:
@@ -21,12 +23,12 @@ private:
 	static int finalizeShaderProgram(GLuint sprogram);
 
 public:
+    static inline GLuint vao[1];
+
 	OGLSetup();
+    static void setupVertexBuffers(DrawableObjectManager& objManager, UserInterfaceManager& uiManager);
 	static bool checkOpenGLError();
 	static GLuint createShaderProgram(std::string vp, std::string fp);
-	static GLuint createShaderProgram(std::string vp, std::string gp, std::string fp);
-	static GLuint createShaderProgram(std::string vp, std::string tCS, std::string tES, std::string fp);
-	static GLuint createShaderProgram(std::string vp, std::string tCS, std::string tES, std::string gp, std::string fp);
 };
 
 #endif
