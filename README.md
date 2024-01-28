@@ -13,17 +13,23 @@ to create your own scene, create a backup of /default/ first with a different na
 
 # Dependencies
 
-- glfw3
+- glfw3 3.3
 - glm
 - glew
 - freeglut
+- CMake 3.28.1
 - Support for OpenGL 4.6
 
 # Build From Source
 
+  - Clone the repository
   - cd into the "dynamate" directory
-  - run 'make'
-  - run Dynamate with "./main"
+  - create a folder called "build"
+  - cd into "build"
+  - run "cmake .."
+  - once that's finished, run "make all"
+  - return to the root "dynamate" directory
+  - run "Dynamate"
 
 # How To Create a Scene
 
