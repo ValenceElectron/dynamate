@@ -12,7 +12,8 @@ Draw::Draw(DrawableObjectManager& objManager, UserInterfaceManager& uiManager, i
     uiLoader = new UserInterfaceLoader(uiManager, aspectRatio, windowWidth, windowHeight);
 
     // setupVertexBuffers() must be called in Draw's constructor but after objLoader.
-    // it handles the vertex buffers for all DrawableObjects in objManager at once.
+    // it handles the vertex buffers for all DrawableObjects in objManager
+    // and all UserInterfaceElements in uiManager, at once.
     OGLSetup::setupVertexBuffers(objManager, uiManager);
 }
 
@@ -36,12 +37,12 @@ void Draw::startDrawing(double currentTime, DrawableObjectManager& objManager, U
 }
 
 void Draw::drawObjects(double currentTime, DrawableObjectManager& objManager, UserInterfaceManager& uiManager) {
-    int numberOfObjects = objManager.getBufferSize();
+    numberOfObjects = objManager.getBufferSize();
     for (int i = 0; i < numberOfObjects; i++) {
         objManager.getNext()->draw(currentTime, vMat, pMat);
     }
 
-    int numberOfElements = uiManager.getBufferSize();
+    numberOfElements = uiManager.getBufferSize();
     for (int i = 0; i < numberOfElements; i++) {
         uiManager.getNext()->draw(currentTime, vMat, pMat);
     }

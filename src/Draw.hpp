@@ -23,6 +23,8 @@ private:
 
     Camera camera{0.0f, 0.0f, 10.0f};
     float cameraX, cameraY, cameraZ;
+    int numberOfObjects = 0;
+    int numberOfElements = 0;
 
     glm::mat4 pMat, vMat;
     float aspectRatio;
